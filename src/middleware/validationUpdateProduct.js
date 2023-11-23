@@ -5,8 +5,6 @@ export const validationUpdateProducts = (req,res,next) =>{
     try{
         const productManager = new ProductManager()
         const {id} = req.params
-
-        const product = productManager.getProductById(Number(id))
     
         const keysInput = Object.keys(req.body)
         const keysProduct = Object.keys(productManager.getProductById(Number(id)))

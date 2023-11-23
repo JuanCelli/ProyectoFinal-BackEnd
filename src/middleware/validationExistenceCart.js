@@ -8,7 +8,7 @@ export const validationExistenceCart = (req, res, netx) => {
     const cart = cartManager.getCartById(validationNumPositive(id));
 
     if (!cart) {
-        res.status(404).json({
+        return res.status(404).json({
             error: "Not found"
         });
     }

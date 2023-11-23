@@ -32,8 +32,16 @@ class CartManager {
         this.saveFile()
     }
 
-    updateCart(id, newCart){
-        this.carts = this.carts.map(cart => cart.id === id ? {id:cart.id,...cart, ...newCart} : cart)
+    updateCart(id, pid){
+        const products = this.getCartById(id).products
+        const product = products.find(product=>product.id===pid)
+
+        if(!product){
+            products.push({id:pid,quality:1})
+        }else{
+            product.quality ++
+        }
+
         this.saveFile()
     }
 

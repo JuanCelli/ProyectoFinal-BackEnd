@@ -1,5 +1,5 @@
 class Cart{
-    constructor(products, status){
+    constructor(products, status=true){
         this.products = products;
         this.status = status
     }

@@ -12,7 +12,6 @@ const PORT = 8080
 
 
 app.get("/",(req,res)=>{
-    console.log("hola")
     res.send("Hola")
 })
 
