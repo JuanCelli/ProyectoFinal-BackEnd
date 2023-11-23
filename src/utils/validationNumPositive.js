@@ -1,0 +1,1 @@
+export const validationNumPositive = (num) =>Number(num) <= 0 || Number(num) == NaN ? 0 : Number(num)

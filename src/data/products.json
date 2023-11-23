@@ -1,0 +1,13 @@
+[
+	{
+		"id": 1,
+		"title": "Prueba de actualización",
+		"description": "Este es un producto prueba",
+		"price": 200,
+		"thumbnail": "",
+		"code": "155149",
+		"stock": 25,
+		"status": true,
+		"category": "asdas"
+	}
+]
