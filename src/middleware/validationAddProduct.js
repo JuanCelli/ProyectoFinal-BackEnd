@@ -1,11 +1,10 @@
 import Product from "../models/Product.js"
-import ProductManager from "../utils/ProductManager.js"
+import { productManager } from "../routes/products.router.js"
 import { validationProduct } from "../utils/validationProduct.js"
 
 export const validationAddProduct = (req,res,netx) =>{
     const {title,description,price,thumbnail,code,stock,status,category} = req.body
     const product = new Product(title,description,price,thumbnail,code,stock,status,category)
-    const productManager = new ProductManager()
     const products = productManager.getProducts()
 
     if(!validationProduct(product)){

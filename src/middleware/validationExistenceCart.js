@@ -1,7 +1,6 @@
-import CartManager from '../utils/CartManager.js';
+import { cartManager } from '../routes/cart.router.js';
 import { validationNumPositive } from '../utils/validationNumPositive.js';
 
-const cartManager = new CartManager()
 
 export const validationExistenceCart = (req, res, netx) => {
     const { id } = req.params;

@@ -5,6 +5,7 @@ import { validationExistenceProduct } from "../middleware/validationExistencePro
 import { validationAddProduct } from "../middleware/validationAddProduct.js";
 import { validationUpdateProducts } from "../middleware/validationUpdateProduct.js";
 import { generatorId } from "../utils/generatorId.js";
+import { updateProductsToClient } from "../server.js";
 
 
 const router = Router()
@@ -37,6 +38,7 @@ router.get("/:id",validationExistenceProduct,(req, res)=>{
 router.post("/",validationAddProduct,(req,res)=>{
     const product = {id:generatorId(productManager.getProducts()),...req.body}
     productManager.addProduct(product)
+    updateProductsToClient()
     res.json(
         product
     )
@@ -44,10 +46,12 @@ router.post("/",validationAddProduct,(req,res)=>{
 
 
 
+
 //Actualiza producto por id y por campo de body
 router.put("/:id",validationExistenceProduct,validationUpdateProducts,(req,res)=>{
     const {id} = req.params
     productManager.updateProduct(Number(id), req.body)
+    updateProductsToClient()
     res.json(productManager.getProductById(Number(id)))
 })
 
@@ -57,7 +61,7 @@ router.delete("/:id",validationExistenceProduct,(req,res)=>{
     const {id} = req.params
     const productDeleted = productManager.getProductById(Number(id))
     productManager.deleteProduct(Number(id))
-
+    updateProductsToClient()
     res.json(
         productDeleted
     )

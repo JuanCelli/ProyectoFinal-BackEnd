@@ -1,9 +1,7 @@
-import ProductManager from "../utils/ProductManager.js"
-
+import { productManager } from "../routes/products.router.js"
 export const validationUpdateProducts = (req,res,next) =>{
 
     try{
-        const productManager = new ProductManager()
         const {id} = req.params
     
         const keysInput = Object.keys(req.body)

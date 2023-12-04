@@ -1,9 +1,8 @@
 import Product from "../Product.js"
-import ProductManager from "../ProductManager.js"
+import { productManager } from "../routes/products.router.js"
 
 
 export  const testProductManager = async ()=>{
-    const productManager = new ProductManager()
     console.log(productManager.getProducts())
 
 

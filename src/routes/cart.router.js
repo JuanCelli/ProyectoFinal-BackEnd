@@ -6,7 +6,7 @@ import { validationAddCart } from "../middleware/validationAddCart.js";
 import { validationUpgradeCart } from "../middleware/validationUpgradeCart.js";
 
 const router = Router()
-const cartManager = new CartManager()
+export const cartManager = new CartManager()
 
 // Obtiene carrito por id
 router.get("/:id", validationExistenceCart,(req, res)=>{
@@ -18,7 +18,7 @@ router.get("/:id", validationExistenceCart,(req, res)=>{
 
 //Crea un carrito
 router.post("/",validationAddCart,(req,res)=>{
-    const cart = {id: generatorId(cartManager.getCarts()),...req.body}
+    const cart = {id: generatorId(cartManager.getAllCarts()),products:[],status:true}
     
     cartManager.addCart(cart)
     res.json(cart)

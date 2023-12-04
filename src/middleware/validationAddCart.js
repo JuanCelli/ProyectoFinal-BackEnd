@@ -1,10 +1,10 @@
 import Cart from "../models/Cart.js"
-import ProductManager from "../utils/ProductManager.js"
+import { productManager } from "../routes/products.router.js"
+
 
 export const validationAddCart = (req,res,netx) =>{
     try {
         const {products} = req.body
-        const productManager = new ProductManager()
     
         if(!Array.isArray(products)){
             throw {status:500, msj: `Los datos ingresados de productos no tiene el formato requerido`}

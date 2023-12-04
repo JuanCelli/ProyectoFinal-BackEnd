@@ -10,6 +10,10 @@ class CartManager {
     getCarts (){
         return this.carts.filter(cart=>cart.status)
     }
+    getAllCarts (){
+        return this.carts
+    }
+
 
     getCartById(id){
         return this.carts.find(cart => cart.id ===id && cart.status)

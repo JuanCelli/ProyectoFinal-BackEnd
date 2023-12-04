@@ -1,7 +1,6 @@
-import ProductManager from "../utils/ProductManager.js"
+import { productManager } from "../routes/products.router.js"
 
 export const validationUpgradeCart = (req,res,next) =>{
-        const productManager = new ProductManager()
         const {pid} = req.params
         
         if(!productManager.getProductById(Number(pid))){
