@@ -5,6 +5,8 @@ import viewsRouter from './routes/views.router.js'
 import rootDir from './utils/dirname.js'
 import hanblebars from 'express-handlebars'
 import { Server } from 'socket.io'
+import mongoose from 'mongoose'
+import { dbName, password, userName } from './env.js'
 
 const app = express()
 
@@ -35,16 +37,25 @@ const httpServer = app.listen(PORT,()=>{
 })
 
 const socketServer = new Server(httpServer)
-    
+
+mongoose.connect(`mongodb+srv://userTest:${password}@ecommerce.4o9gdn5.mongodb.net/${dbName}?retryWrites=true&w=majority`)
+    .then(()=>{
+        console.log("Base de datos conectada")
+    })
+    .catch((error)=>{
+        console.log(error)
+    })
+
+
 socketServer.on("connection",(socketClient)=>{
     console.log("Nuevo usuario conectado")
-    
+
     socketClient.on("message", (data)=>{
         console.log(data)
     })
 
     updateProductsToClient()
-    
+
 })
 export const updateProductsToClient = () =>{
     socketServer.emit("update_products",productManager.getProducts())

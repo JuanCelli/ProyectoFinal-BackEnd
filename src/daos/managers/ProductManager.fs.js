@@ -15,7 +15,7 @@ class ProductManager{
     deleteProduct(id){
         this.products = this.products.map((product) => {
             if(product.id === id){
-                product.status = false 
+                product.status = false
                 return product
             }else{
                 return product

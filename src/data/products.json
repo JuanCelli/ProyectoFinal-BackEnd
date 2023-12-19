@@ -1,35 +1,7 @@
 [
 	{
 		"id": 1,
-		"title": "Tablet",
-		"description": "Este es un producto prueba",
-		"price": 200,
-		"thumbnail": "",
-		"code": "155149",
-		"stock": 25,
-		"status": false,
-		"category": "asdas"
-	},
-	{
-		"id": 2,
-		"title": "Netbook",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "",
-		"code": "154519",
-		"stock": 30,
-		"status": true,
-		"category": "Tecnología"
-	},
-	{
-		"id": 3,
-		"title": "Notebook",
-		"description": "Este es un producto prueba",
-		"price": 10000,
-		"thumbnail": "",
-		"code": "157519",
-		"stock": 30,
-		"status": true,
+		"title": "Computadora",
 		"category": "Tecnología"
 	}
 ]
