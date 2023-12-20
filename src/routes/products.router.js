@@ -1,8 +1,8 @@
 import { Router } from "express";
 import ProductManager from "../daos/managers/ProductManager.fs.js";
-import { generatorId } from "../utils/generatorId.js";
-import { updateProductsToClient } from "../server.js";
 import productModel from "../daos/models/product.model.js";
+import { validationId } from "../middleware/validationId.js";
+import { valitionExistenceProduct } from "../middleware/validationExistenceP.js";
 
 
 const router = Router()
@@ -22,14 +22,11 @@ router.get("/", async(req,res)=>{
 })
 
 
-
 // Obtiene producto por id
-router.get("/:id",async (req, res)=>{
+router.get("/:id",validationId,valitionExistenceProduct,async (req, res)=>{
     try {
         const product = await productModel.findOne({$and:[{_id: req.params.id},{status:true}]})
-        if(!product){
-            throw {status:404, msj: "Not found"}
-        }
+
         res.json(product)
     } catch (error) {
         console.log(error)
@@ -52,22 +49,19 @@ router.post("/", async (req,res)=>{
 
 
 //Actualiza producto por id y por campo de body
-router.put("/:id",async (req,res)=>{
+router.put("/:id",validationId,valitionExistenceProduct,async (req,res)=>{
     try{
         const {id} = req.params
-        const product = await productModel.findOne({$and:[{_id: req.params.id},{status:true}]})
-
-        if(!product){
-            throw {status:404, msj: "Not found"}
-        }
 
         const newProduct = req.body
         const response = await productModel.updateOne({_id: id}, newProduct)
 
-        if(!response.acknowledged){
+        if(response.modifiedCount==0){
             throw {status:400, msj: "Producto no actualizado"}
         }
-        res.json({response})
+
+        const updatedProduct = await productModel.findOne({_id: id})
+        res.json(updatedProduct)
 
     }catch (error) {
         console.log(error)
@@ -77,20 +71,17 @@ router.put("/:id",async (req,res)=>{
 
 
 //Elimina producto por id.
-router.delete("/:id",async (req,res)=>{
+router.delete("/:id",validationId,valitionExistenceProduct,async (req,res)=>{
     try{
         const {id} = req.params
-        const product = await productModel.findOne({$and:[{_id: req.params.id},{status:true}]})
-
-        if(!product){
-            throw {status:404, msj: "Not found"}
-        }
 
         const response = await productModel.updateOne({_id: id}, {status:false})
-        res.json(response)
+
+        const deletedProduct = await productModel.findOne({_id: id})
+        res.json(deletedProduct)
     }catch (error) {
         console.log(error)
-        res.status(error.status).json({message:error.msj})
+        res.status(error.status||500).json({message:error.msj||error})
     }
 })
 

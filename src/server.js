@@ -1,5 +1,5 @@
 import express from 'express'
-import productsRouter, { productManager } from './routes/products.router.js'
+import productsRouter from './routes/products.router.js'
 import cartRouter from './routes/cart.router.js'
 import viewsRouter from './routes/views.router.js'
 import rootDir from './utils/dirname.js'
@@ -7,6 +7,8 @@ import hanblebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import { dbName, password, userName } from './env.js'
+import messageModel from './daos/models/message.model.js'
+import { deleteAllMesagges } from './daos/utils/deleteAllMessage.js'
 
 const app = express()
 
@@ -50,14 +52,26 @@ mongoose.connect(`mongodb+srv://userTest:${password}@ecommerce.4o9gdn5.mongodb.n
 socketServer.on("connection",(socketClient)=>{
     console.log("Nuevo usuario conectado")
 
-    socketClient.on("message", (data)=>{
-        console.log(data)
+    socketClient.on("message", async (data)=>{
+        try {
+            const newMessage = await messageModel.create(data)
+            updateMessagesToClient()
+
+        } catch (error) {
+            console.log(error)
+        }
     })
 
-    updateProductsToClient()
+    updateMessagesToClient()
 
 })
-export const updateProductsToClient = () =>{
-    socketServer.emit("update_products",productManager.getProducts())
-}
 
+export const updateMessagesToClient = async () =>{
+    try {
+        const message = await messageModel.find()
+        socketServer.emit("update_messages",message)
+    } catch (error) {
+        console.log(error)
+    }
+
+}

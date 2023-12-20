@@ -11,9 +11,9 @@ router.get("/", (req,res)=>{
         products:productManager.getProducts()
     })
 })
-router.get("/realtimeproducts", (req,res)=>{
-    res.render("realTimeProducts",{
-        title:"Listado en tiempo real",
+router.get("/chat", (req,res)=>{
+    res.render("chat",{
+        title:"Chat",
     })
 })
 

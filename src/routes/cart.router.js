@@ -1,20 +1,18 @@
 import { Router } from "express";
-import { validationExistenceCart } from "../middleware/validationExistenceCart.js";
 import CartManager from "../daos/managers/CartManager.fs.js";
-import {generatorId} from '../utils/generatorId.js'
-import { validationAddCart } from "../middleware/validationAddCart.js";
-import { validationUpgradeCart } from "../middleware/validationUpgradeCart.js";
 import cartModel from "../daos/models/cart.model.js";
 import productModel from "../daos/models/product.model.js";
+import { validationId } from "../middleware/validationId.js";
+import { valitionExistenceCart } from "../middleware/validationExistenceC.js";
 
 const router = Router()
 export const cartManager = new CartManager()
 
 // Obtiene carrito por id
-router.get("/:id",async (req, res)=>{
+router.get("/:id",validationId,async (req, res)=>{
     try {
         const {id} = req.params
-        const cart = cartModel.findOne({$and:[{_id: id},{status:true}]})
+        const cart = await cartModel.findOne({$and:[{_id: id},{status:true}]})
 
         if(!cart){
             throw {status:404, msj: "Not found"}
@@ -23,7 +21,7 @@ router.get("/:id",async (req, res)=>{
         res.json(cart)
     }catch (error){
         console.log(error)
-        res.status(error.status).json({message:error.msj})
+        res.status(error.status).json({message:error.msj })
     }
 })
 
@@ -31,50 +29,63 @@ router.get("/:id",async (req, res)=>{
 //Crea un carrito
 router.post("/",async (req,res)=>{
     try{
-        const idsProdcuts = await productModel.distinct("_id")
+        const objectIdProducts = await productModel.distinct("_id")
+        const idsProducts = objectIdProducts.map(id => id.toString())
+        let notFound = false
         req.body.products.map((product)=>{
-            if(!idsProdcuts.includes(product.id)){
-                throw {status:404, msj: "Not found"}
+            if(!idsProducts.includes(product.id)){
+                notFound = true
             }
         })
+        if(notFound){
+            throw {status:404, msj: "Not found"}
+        }
+
         const cart = await cartModel.create(req.body)
+
         res.json(cart)
 
     }catch (error){
         console.log(error)
-        res.json({message:error.message})
+        res.status(error.status||500).json({message:error.msj || error})
     }
 })
-
 
 //Actualiza cantidad de producto por id de un carrito.
-router.post("/:id/product/:pid",async (req,res)=>{
+router.post("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res)=>{
 
-    const {id,pid} = req.params
+    try {
+        const {id,pid} = req.params
 
-    const cart = cartModel.findOne({$and:[{_id: id},{status:true}]})
+        const response = await cartModel.updateOne({_id: id, "products.id":pid},{$inc:{"products.$.quality":1}})
 
-    if(!cart){
-        throw {status:404, msj: "Not found"}
-    }
-
-    const response = await cartModel.updateOne({_id:id},{
-        products: {
-            
+        if(response.modifiedCount==0){
+            throw {status:404, msj: "Product not found"}
         }
-    })
 
+        const cartUpdated = await cartModel.findOne({$and:[{_id: id},{status:true}]})
+        res.json(cartUpdated)
 
-
+    } catch (error) {
+        console.log(error)
+        res.status(error.status||500).json({message:error.msj || error})
+    }
 })
 
 
-//Elimina producto por id.
-router.delete("/:id",validationExistenceCart,(req,res)=>{
-    const {id} = req.params
-    const productDeleted = cartManager.getCartById(Number(id))
-    cartManager.deleteCart(Number(id))
-    res.json(productDeleted)
+//Elimina carrito por id
+router.delete("/:id",validationId,valitionExistenceCart,async (req,res)=>{
+    try {
+        const {id} = req.params
+
+        const response = await cartModel.updateOne({_id: id}, {status:false})
+
+        const deletedCart = await cartModel.findOne({_id: id})
+        res.json(deletedCart)
+    } catch (error) {
+        console.log(error)
+        res.status(error.status||500).json({message:error.msj})
+    }
 })
 
 
