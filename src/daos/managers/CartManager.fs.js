@@ -27,7 +27,7 @@ class CartManager {
     deleteCart(id){
         this.carts = this.carts.map((cart) => {
             if(cart.id === id){
-                cart.status = false 
+                cart.status = false
                 return cart
             }else{
                 return cart

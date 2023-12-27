@@ -3,6 +3,9 @@ import ProductManager from "../daos/managers/ProductManager.fs.js";
 import productModel from "../daos/models/product.model.js";
 import { validationId } from "../middleware/validationId.js";
 import { valitionExistenceProduct } from "../middleware/validationExistenceP.js";
+import { productManagerMongo } from "../daos/managers/productManager.mongo.js";
+
+
 
 
 const router = Router()
@@ -12,12 +15,13 @@ export const productManager = new ProductManager()
 // Obtiene producto
 router.get("/", async(req,res)=>{
     try {
-        const products = await productModel.find({status:true})
+        const {limit, page,query,sort} = req.query
+
+
+        const products = await productManagerMongo.getProducts(limit, page, query, sort)
         res.json(products)
     } catch (error) {
-        console.log(error)
-
-        res.json({message:"error"})
+        res.json(error)
     }
 })
 
@@ -25,23 +29,26 @@ router.get("/", async(req,res)=>{
 // Obtiene producto por id
 router.get("/:id",validationId,valitionExistenceProduct,async (req, res)=>{
     try {
-        const product = await productModel.findOne({$and:[{_id: req.params.id},{status:true}]})
+        const {id} = req.params
+        const product = await productManagerMongo.getProductById(id)
 
         res.json(product)
     } catch (error) {
-        console.log(error)
-        res.status(error.status).json({message:error.msj})
+        res.json(error)
     }
 })
 
 //Agrega un producto
 router.post("/", async (req,res)=>{
     try {
-        const product = await productModel.create(req.body)
+        const product = await productManagerMongo.createProduct(req.body)
+
+        if (!product.status){
+            throw {status:400, msj: "No se pudo agregar el producto"}
+        }
         res.json(product)
     } catch (error) {
-        console.log(error)
-        res.json({message:error.message})
+        res.status(error.status).json({message:error.msj})
     }
 })
 
@@ -54,17 +61,15 @@ router.put("/:id",validationId,valitionExistenceProduct,async (req,res)=>{
         const {id} = req.params
 
         const newProduct = req.body
-        const response = await productModel.updateOne({_id: id}, newProduct)
+        const response = await productManagerMongo.updateProduct(id, newProduct)
 
-        if(response.modifiedCount==0){
-            throw {status:400, msj: "Producto no actualizado"}
+        if(response.error){
+            throw response
         }
 
-        const updatedProduct = await productModel.findOne({_id: id})
-        res.json(updatedProduct)
+        res.json({message: `Producto actualizado con éxito (ID: ${id})`})
 
     }catch (error) {
-        console.log(error)
         res.status(error.status).json({message:error.msj})
     }
 })
@@ -77,11 +82,14 @@ router.delete("/:id",validationId,valitionExistenceProduct,async (req,res)=>{
 
         const response = await productModel.updateOne({_id: id}, {status:false})
 
-        const deletedProduct = await productModel.findOne({_id: id})
-        res.json(deletedProduct)
+        if(response.error){
+            throw response
+        }
+
+        res.json({message: `Producto eliminado con éxito (ID: ${id})`})
     }catch (error) {
         console.log(error)
-        res.status(error.status||500).json({message:error.msj||error})
+        res.status(error.status).json({message:error.msj})
     }
 })
 

@@ -4,6 +4,7 @@ import cartModel from "../daos/models/cart.model.js";
 import productModel from "../daos/models/product.model.js";
 import { validationId } from "../middleware/validationId.js";
 import { valitionExistenceCart } from "../middleware/validationExistenceC.js";
+import { cartManagerMongo } from "../daos/managers/CartManager.mongo.js";
 
 const router = Router()
 export const cartManager = new CartManager()
@@ -12,15 +13,15 @@ export const cartManager = new CartManager()
 router.get("/:id",validationId,async (req, res)=>{
     try {
         const {id} = req.params
-        const cart = await cartModel.findOne({$and:[{_id: id},{status:true}]})
+        const response = await cartManagerMongo.getCartById(id)
+        console.log(response)
 
-        if(!cart){
-            throw {status:404, msj: "Not found"}
+        if(response.error){
+            throw response
         }
 
-        res.json(cart)
+        res.json(response)
     }catch (error){
-        console.log(error)
         res.status(error.status).json({message:error.msj })
     }
 })
@@ -29,46 +30,45 @@ router.get("/:id",validationId,async (req, res)=>{
 //Crea un carrito
 router.post("/",async (req,res)=>{
     try{
-        const objectIdProducts = await productModel.distinct("_id")
-        const idsProducts = objectIdProducts.map(id => id.toString())
-        let notFound = false
-        req.body.products.map((product)=>{
-            if(!idsProducts.includes(product.id)){
-                notFound = true
-            }
-        })
-        if(notFound){
-            throw {status:404, msj: "Not found"}
-        }
-
-        const cart = await cartModel.create(req.body)
-
+        const cart = await cartManagerMongo.createCart()
         res.json(cart)
 
     }catch (error){
-        console.log(error)
-        res.status(error.status||500).json({message:error.msj || error})
+        res.json(error)
+    }
+})
+
+router.put("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res)=>{
+
+    try {
+        const {id,pid} = req.params
+        const response = await cartManagerMongo.addProductToCart(id, pid)
+
+        if(response.error){
+            throw response
+        }
+        res.json({message:"Producto agregado al carrito con éxito"})
+    } catch (error) {
+        res.status(error.status).json({message:error.msj})
     }
 })
 
 //Actualiza cantidad de producto por id de un carrito.
-router.post("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res)=>{
+router.put("/:id/product/:pid/increment",validationId,valitionExistenceCart,async (req,res)=>{
 
     try {
         const {id,pid} = req.params
 
-        const response = await cartModel.updateOne({_id: id, "products.id":pid},{$inc:{"products.$.quality":1}})
+        const response = await cartManagerMongo.incrementProductInCart(id, pid)
 
-        if(response.modifiedCount==0){
-            throw {status:404, msj: "Product not found"}
+        if(response.error){
+            throw response
         }
 
-        const cartUpdated = await cartModel.findOne({$and:[{_id: id},{status:true}]})
-        res.json(cartUpdated)
+        res.json({message:`Producto del carrito actualizado correctamente`})
 
     } catch (error) {
-        console.log(error)
-        res.status(error.status||500).json({message:error.msj || error})
+        res.status(error.status).json({message:error.msj})
     }
 })
 
@@ -78,13 +78,84 @@ router.delete("/:id",validationId,valitionExistenceCart,async (req,res)=>{
     try {
         const {id} = req.params
 
-        const response = await cartModel.updateOne({_id: id}, {status:false})
+        const response = await cartManagerMongo.deleteCart(id)
 
-        const deletedCart = await cartModel.findOne({_id: id})
-        res.json(deletedCart)
+        if(response.error){
+            throw response
+        }
+
+        res.json({message:"Carrito eliminado con éxito"})
     } catch (error) {
         console.log(error)
-        res.status(error.status||500).json({message:error.msj})
+        res.status(error.status).json({message:error.msj})
+    }
+})
+
+router.delete("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res)=>{
+    try {
+        const {id,pid} = req.params
+
+        const response = await cartManagerMongo.deleteProductFromCart(id, pid)
+
+        if(response.error){
+            throw response
+        }
+
+        res.json({message:"Producto eliminado del carrito con éxito"})
+    } catch (error) {
+        console.log(error)
+        res.status(error.status).json({message:error.msj})
+    }
+})
+
+router.put("/:id",validationId,valitionExistenceCart,async (req,res)=>{
+
+    try {
+        const {id} = req.params
+        const response = await cartManagerMongo.updateCart(id, req.body)
+        if(response.error){
+            throw response
+        }
+        res.json({message:"Carrito actualizado con éxito"})
+    } catch (error) {
+        res.status(error.status).json({message:error.msj})
+    }
+})
+
+router.put("/:id/product/:pid/quality",validationId,valitionExistenceCart,async (req,res)=>{
+    try {
+        const {id,pid} = req.params
+        const newQuality = Number(req.body.newQuality)
+
+        if(typeof(newQuality)!=="number"){
+            throw {status:400, msj: "La nueva cantidad debe ser un número"}
+        }
+
+        const response = await cartManagerMongo.updateQualityProductInCart(id, pid, newQuality)
+
+        if(response.error){
+            throw response
+        }
+
+        res.json({message:`Producto del carrito actualizado correctamente`})
+
+    } catch (error) {
+        res.status(error.status).json({message:error.msj})
+    }
+})
+
+router.delete("/:id/deleteProducts",validationId,valitionExistenceCart,async (req,res)=>{
+    try {
+        const {id} = req.params
+        const response = await cartManagerMongo.deleteAllProductFromCart(id)
+
+        if(response.erro){
+            throw response
+        }
+        res.json({message:"Productos eliminados del carrito con éxito"})
+
+    } catch (error) {
+        res.status(error.status).json({message:error.msj})
     }
 })
 

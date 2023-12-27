@@ -11,5 +11,6 @@ export const validationExistenceProduct = (req, res, netx) => {
         });
     }
 
+
     netx();
 };
