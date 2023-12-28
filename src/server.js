@@ -8,13 +8,11 @@ import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import { dbName, password, userName } from './env.js'
 import messageModel from './daos/models/message.model.js'
-import { deleteAllMesagges } from './daos/utils/deleteAllMessage.js'
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-
 
 
 app.use("/api/products",productsRouter)
@@ -24,9 +22,11 @@ app.use("/",viewsRouter)
 app.use(express.static(`${rootDir}/public`))
 
 
+
 app.engine(`hbs`,hanblebars.engine({
     extname: `hbs`,
     defaultLayout: `main.hbs`,
+    allowProtoPropertiesByDefault: true
 }))
 
 app.set("view engine","hbs")

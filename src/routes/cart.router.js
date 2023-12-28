@@ -14,7 +14,6 @@ router.get("/:id",validationId,async (req, res)=>{
     try {
         const {id} = req.params
         const response = await cartManagerMongo.getCartById(id)
-        console.log(response)
 
         if(response.error){
             throw response
@@ -43,8 +42,6 @@ router.put("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res
     try {
         const {id,pid} = req.params
         const response = await cartManagerMongo.addProductToCart(id, pid)
-
-        console.log(response)
 
         if(response.error){
             throw response

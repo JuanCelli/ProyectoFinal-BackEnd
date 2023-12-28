@@ -1,13 +1,9 @@
 import cartModel from "../models/cart.model.js"
-import productModel from "../models/product.model.js"
-
 
 class CartManagerMongo{
     async getCartById(id){
         try {
-            const cart = await cartModel.findOne({$and:[{_id: id},{status:true}]}).populate("productsCart")
-
-            console.log(cart)
+            const cart = await cartModel.findOne({$and:[{_id: id},{status:true}]}).populate("productsCart.product")
 
             if(!cart){
                 throw {error: true, status:404, msj: "Not found"}
@@ -37,9 +33,8 @@ class CartManagerMongo{
                 throw {error: true, status:400, msj: "El producto ya existe en el carrito"}
             }
 
-            const response = await cartModel.updateOne({_id: id}, {$push: {productsCart:{id:pid}}})
+            const response = await cartModel.updateOne({_id: id}, {$push: {productsCart:{product:pid}}})
 
-            console.log(response)
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Carrito no actualizado"}
             }
@@ -79,10 +74,8 @@ class CartManagerMongo{
     async updateQualityProductInCart(id, pid,newQuality){
 
         try {
-            console.log(newQuality)
             const response = await cartModel.updateOne({_id: id, "productsCart.id":pid},{$set:{"productsCart.$.quality":newQuality}})
 
-            console.log(response)
 
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Carrito no actualizado"}

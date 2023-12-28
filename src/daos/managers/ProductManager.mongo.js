@@ -30,7 +30,6 @@ class ProductManagerMongo{
     async createProduct(product){
         try {
             const newProduct = await productModel.create(product)
-            console.log(newProduct)
             return newProduct
         } catch (error) {
             return error
@@ -52,7 +51,6 @@ class ProductManagerMongo{
     async deleteProduct(id){
         try {
             const response = await productModel.updateOne({_id: id}, {status:false})
-            console.log(response)
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Producto no eliminado"}
             }
