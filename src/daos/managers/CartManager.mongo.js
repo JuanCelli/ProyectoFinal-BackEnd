@@ -5,7 +5,9 @@ import productModel from "../models/product.model.js"
 class CartManagerMongo{
     async getCartById(id){
         try {
-            const cart = await cartModel.findOne({$and:[{_id: id},{status:true}]}).populate("products.id")
+            const cart = await cartModel.findOne({$and:[{_id: id},{status:true}]}).populate("productsCart")
+
+            console.log(cart)
 
             if(!cart){
                 throw {error: true, status:404, msj: "Not found"}
@@ -20,8 +22,7 @@ class CartManagerMongo{
 
     createCart(){
         try {
-            const newCart = cartModel.create({products:[]})
-            console.log(newCart)
+            const newCart = cartModel.create({productsCart:[]})
             return newCart
         } catch (error) {
             return error
@@ -30,16 +31,15 @@ class CartManagerMongo{
 
     async addProductToCart(id, pid){
         try {
-            console.log(pid)
-            const product = await cartModel.findOne({$and:[{_id: id},{products:{id:pid}}]})
+            const product = await cartModel.findOne({$and:[{_id: id},{productsCart:{id:pid}}]})
 
-            console.log(product)
             if(product){
                 throw {error: true, status:400, msj: "El producto ya existe en el carrito"}
             }
 
-            const response = await cartModel.updateOne({_id: id}, {$push: {products:{id:pid}}})
+            const response = await cartModel.updateOne({_id: id}, {$push: {productsCart:{id:pid}}})
 
+            console.log(response)
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Carrito no actualizado"}
             }
@@ -52,7 +52,7 @@ class CartManagerMongo{
     async updateCart(id, products){
 
         try {
-            const response = await cartModel.updateOne({_id: id}, {products: products})
+            const response = await cartModel.updateOne({_id: id}, {productsCart: products})
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Carrito no actualizado"}
             }
@@ -65,7 +65,7 @@ class CartManagerMongo{
     async incrementProductInCart(id, pid){
 
         try {
-            const response = await cartModel.updateOne({_id: id, "products.id":pid},{$inc:{"products.$.quality":1}})
+            const response = await cartModel.updateOne({_id: id, "productsCart.id":pid},{$inc:{"productsCart.$.quality":1}})
 
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Carrito no actualizado"}
@@ -80,7 +80,7 @@ class CartManagerMongo{
 
         try {
             console.log(newQuality)
-            const response = await cartModel.updateOne({_id: id, "products.id":pid},{$set:{"products.$.quality":newQuality}})
+            const response = await cartModel.updateOne({_id: id, "productsCart.id":pid},{$set:{"productsCart.$.quality":newQuality}})
 
             console.log(response)
 
@@ -109,7 +109,7 @@ class CartManagerMongo{
     async deleteProductFromCart(id, pid){
 
         try {
-            const response = await cartModel.updateOne({_id: id}, {$pull: {products:{id:pid}}})
+            const response = await cartModel.updateOne({_id: id}, {$pull: {productsCart:{id:pid}}})
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Producto no eliminado"}
             }
@@ -121,7 +121,7 @@ class CartManagerMongo{
 
     async deleteAllProductFromCart(id){
         try {
-            const response = await cartModel.updateOne({_id: id}, {$set: {products:[]}})
+            const response = await cartModel.updateOne({_id: id}, {$set: {productsCart:[]}})
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Productos no eliminados"}
             }

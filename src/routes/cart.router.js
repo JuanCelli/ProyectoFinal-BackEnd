@@ -44,6 +44,8 @@ router.put("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res
         const {id,pid} = req.params
         const response = await cartManagerMongo.addProductToCart(id, pid)
 
+        console.log(response)
+
         if(response.error){
             throw response
         }

@@ -3,19 +3,16 @@ import mongoose, { Schema, model } from "mongoose";
 
 
 const productsOfCartSchema = new Schema({
-    id: {type: String, required: true},
+    _id:false,
+    id: {type: Schema.Types.ObjectId, required: true,ref:"products"},
     quality: {type: Number, default: 1, min:1},
-    _id: false,
 })
 
 
 const cartSchema = new Schema({
-    products:{
-        type: mongoose.Schema.Types.ObjectId,
-        default: [],
-        required: true,
-        ref:"products",
-    },
+    productsCart:[
+        productsOfCartSchema
+    ],
     status: {type: Boolean, default: true}
 });
 
