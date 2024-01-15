@@ -1,9 +1,23 @@
-<h1>Productos</h1>
-
+<h1>Bienvenido</h1>
+<div>
+    <h2>Tú perfil</h2>
     <ul>
-        {{#each products}}
-            <li>Nombre: {{this.title}} - Precio: ${{this.price}} - Stock: {{this.stock}}</li>
-            <li>{{this}}</li>
-            {{!-- <li>Nombre: {{this.title}} - Precio: ${{this.price}} - Stock: {{this.stock}}</li> --}}
-        {{/each}}
+        <li>Nombre y apellido: {{user.first_name}} {{user.last_name}}</li>
+        <li>Edad:  {{user.age}}</li>
+        <li>Mail:  {{user.email}}</li>
+        <li>Rol:  {{role}}</li>
     </ul>
+</div>
+
+<div>
+    <h2>Productos</h2>
+        <ul>
+            {{#each products}}
+                <li>Nombre: {{title}} - Precio: ${{price}} - Stock: {{stock}}</li>
+                {{!-- <li>Nombre: {{this.title}} - Precio: ${{this.price}} - Stock: {{this.stock}}</li> --}}
+            {{/each}}
+        </ul>
+</div>
+
+<button class="logout-button">Salir</button>
+<script src="/js/products.js"></script>

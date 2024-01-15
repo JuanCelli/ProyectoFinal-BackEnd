@@ -1,25 +1,51 @@
 import express from 'express'
 import productsRouter from './routes/products.router.js'
-import cartRouter from './routes/cart.router.js'
+import cartRouter from './routes/carts.router.js'
 import viewsRouter from './routes/views.router.js'
+import sessionsRouter from './routes/sessions.router.js'
+import usersViewsRouter from './routes/usersViews.router.js'
 import rootDir from './utils/dirname.js'
 import hanblebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
+import session from 'express-session'
 import { dbName, password, userName } from './env.js'
 import messageModel from './daos/models/message.model.js'
+import MongoStore from 'connect-mongo'
+import cookieParser from 'cookie-parser'
 
+
+
+const mongoUrlDb = `mongodb+srv://userTest:${password}@ecommerce.4o9gdn5.mongodb.net/${dbName}?retryWrites=true&w=majority`
 const app = express()
 
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
+app.use(session(
+    {
+        store: MongoStore.create({
+            mongoUrl: mongoUrlDb,
+            mongoOptions:{useNewUrlParser:true, useUnifiedTopology:true},
+            ttl: 60 * 10
+        }),
+        secret:"coderSecret",
+        resave:false,
+        saveUninitialized:true
+    }
+))
+
 
 app.use("/api/products",productsRouter)
-app.use("/api/cart",cartRouter)
+app.use("/api/carts",cartRouter)
+app.use("/api/sessions",sessionsRouter)
 app.use("/",viewsRouter)
+app.use("/users",usersViewsRouter)
 
 app.use(express.static(`${rootDir}/public`))
+
+
 
 
 
@@ -40,13 +66,15 @@ const httpServer = app.listen(PORT,()=>{
 
 const socketServer = new Server(httpServer)
 
-mongoose.connect(`mongodb+srv://userTest:${password}@ecommerce.4o9gdn5.mongodb.net/${dbName}?retryWrites=true&w=majority`)
+mongoose.connect(mongoUrlDb)
     .then(()=>{
         console.log("Base de datos conectada")
     })
     .catch((error)=>{
         console.log(error)
     })
+
+
 
 
 socketServer.on("connection",(socketClient)=>{
@@ -63,7 +91,6 @@ socketServer.on("connection",(socketClient)=>{
     })
 
     updateMessagesToClient()
-
 })
 
 export const updateMessagesToClient = async () =>{

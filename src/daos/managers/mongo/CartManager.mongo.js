@@ -1,4 +1,5 @@
-import cartModel from "../models/cart.model.js"
+import cartModel from "../../models/cart.model.js"
+import { productManagerMongo } from "./ProductManager.mongo.js"
 
 class CartManagerMongo{
     async getCartById(id){
@@ -18,8 +19,7 @@ class CartManagerMongo{
 
     createCart(){
         try {
-            const newCart = cartModel.create({productsCart:[]})
-            return newCart
+            return newCart = cartModel.create({productsCart:[]})
         } catch (error) {
             return error
         }
@@ -27,10 +27,16 @@ class CartManagerMongo{
 
     async addProductToCart(id, pid){
         try {
-            const product = await cartModel.findOne({$and:[{_id: id},{productsCart:{id:pid}}]})
 
-            if(product){
-                throw {error: true, status:400, msj: "El producto ya existe en el carrito"}
+            const product = await productManagerMongo.getProductById(pid)
+            if(!product){
+                throw {error: true,status:404, msj: "Producto no encontrado"}
+            }
+
+            const productInCart = await cartModel.findOne({$and:[{_id: id},{"productsCart.product":pid}]})
+
+            if(productInCart){
+                return response = await this.incrementProductInCart(id, pid)
             }
 
             const response = await cartModel.updateOne({_id: id}, {$push: {productsCart:{product:pid}}})
@@ -44,8 +50,8 @@ class CartManagerMongo{
         }
     }
 
-    async updateCart(id, products){
 
+    async updateCart(id, products){
         try {
             const response = await cartModel.updateOne({_id: id}, {productsCart: products})
             if(response.acknowledged==false || response.modifiedCount==0){
@@ -58,9 +64,8 @@ class CartManagerMongo{
     }
 
     async incrementProductInCart(id, pid){
-
         try {
-            const response = await cartModel.updateOne({_id: id, "productsCart.id":pid},{$inc:{"productsCart.$.quality":1}})
+            const response = await cartModel.updateOne({_id: id, "productsCart.product":pid},{$inc:{"productsCart.$.quality":1}})
 
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Carrito no actualizado"}
@@ -72,10 +77,13 @@ class CartManagerMongo{
     }
 
     async updateQualityProductInCart(id, pid,newQuality){
+        const newQualityNumber = parseInt(newQuality)
 
         try {
-            const response = await cartModel.updateOne({_id: id, "productsCart.id":pid},{$set:{"productsCart.$.quality":newQuality}})
-
+            if(newQualityNumber<0 || isNaN(newQualityNumber)){
+                throw {error: true,status:400, msj:"El valor ingresado no es valido."}
+            }
+            const response = await cartModel.updateOne({_id: id, "productsCart.product":pid},{$set:{"productsCart.$.quality":newQualityNumber}})
 
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Carrito no actualizado"}
@@ -87,7 +95,6 @@ class CartManagerMongo{
     }
 
     async deleteCart(id){
-
         try {
             const response = await cartModel.updateOne({_id: id}, {status:false})
             if(response.acknowledged==false || response.modifiedCount==0){
@@ -100,9 +107,8 @@ class CartManagerMongo{
     }
 
     async deleteProductFromCart(id, pid){
-
         try {
-            const response = await cartModel.updateOne({_id: id}, {$pull: {productsCart:{id:pid}}})
+            const response = await cartModel.updateOne({_id: id}, {$pull: {productsCart: {product:pid}}})
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Producto no eliminado"}
             }
@@ -127,10 +133,5 @@ class CartManagerMongo{
 
 
 }
-
-
-
-
-
 
 export const cartManagerMongo = new CartManagerMongo()

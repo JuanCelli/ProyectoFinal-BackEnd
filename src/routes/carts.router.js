@@ -1,13 +1,9 @@
 import { Router } from "express";
-import CartManager from "../daos/managers/CartManager.fs.js";
-import cartModel from "../daos/models/cart.model.js";
-import productModel from "../daos/models/product.model.js";
 import { validationId } from "../middleware/validationId.js";
 import { valitionExistenceCart } from "../middleware/validationExistenceC.js";
-import { cartManagerMongo } from "../daos/managers/CartManager.mongo.js";
+import { cartManagerMongo } from "../daos/managers/mongo/CartManager.mongo.js";
 
 const router = Router()
-export const cartManager = new CartManager()
 
 // Obtiene carrito por id
 router.get("/:id",validationId,async (req, res)=>{
@@ -37,7 +33,8 @@ router.post("/",async (req,res)=>{
     }
 })
 
-router.put("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res)=>{
+// Agrega un producto a un carrito por id, si ya existe en ese carrito le aumento 1 la quantity.
+router.post("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res)=>{
 
     try {
         const {id,pid} = req.params
@@ -48,6 +45,24 @@ router.put("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res
         }
         res.json({message:"Producto agregado al carrito con éxito"})
     } catch (error) {
+        res.status(error.status).json({message:error.msj})
+    }
+})
+
+// Actualiza la quality de un product por su id.
+router.put("/:id/product/:pid",validationId,valitionExistenceCart,async(req,res)=>{
+    try {
+        const {id,pid} = req.params
+        const {newQuality} = req.body
+
+        const response = await cartManagerMongo.updateQualityProductInCart(id,pid, newQuality)
+
+        if(response.error){
+            throw response
+        }
+        res.json({message:"Cantidad actuliaza con éxito."})
+
+    }catch(error){
         res.status(error.status).json({message:error.msj})
     }
 })
@@ -66,6 +81,21 @@ router.put("/:id/product/:pid/increment",validationId,valitionExistenceCart,asyn
 
         res.json({message:`Producto del carrito actualizado correctamente`})
 
+    } catch (error) {
+        res.status(error.status).json({message:error.msj})
+    }
+})
+
+// Actualiza el array products con req.body de un carrito por id.
+router.put("/:id",validationId,valitionExistenceCart,async (req,res)=>{
+
+    try {
+        const {id} = req.params
+        const response = await cartManagerMongo.updateCart(id, req.body)
+        if(response.error){
+            throw response
+        }
+        res.json({message:"Carrito actualizado con éxito"})
     } catch (error) {
         res.status(error.status).json({message:error.msj})
     }
@@ -90,6 +120,7 @@ router.delete("/:id",validationId,valitionExistenceCart,async (req,res)=>{
     }
 })
 
+// Elimina producto por id del carrito por su id.
 router.delete("/:id/product/:pid",validationId,valitionExistenceCart,async (req,res)=>{
     try {
         const {id,pid} = req.params
@@ -107,42 +138,8 @@ router.delete("/:id/product/:pid",validationId,valitionExistenceCart,async (req,
     }
 })
 
-router.put("/:id",validationId,valitionExistenceCart,async (req,res)=>{
 
-    try {
-        const {id} = req.params
-        const response = await cartManagerMongo.updateCart(id, req.body)
-        if(response.error){
-            throw response
-        }
-        res.json({message:"Carrito actualizado con éxito"})
-    } catch (error) {
-        res.status(error.status).json({message:error.msj})
-    }
-})
-
-router.put("/:id/product/:pid/quality",validationId,valitionExistenceCart,async (req,res)=>{
-    try {
-        const {id,pid} = req.params
-        const newQuality = Number(req.body.newQuality)
-
-        if(typeof(newQuality)!=="number"){
-            throw {status:400, msj: "La nueva cantidad debe ser un número"}
-        }
-
-        const response = await cartManagerMongo.updateQualityProductInCart(id, pid, newQuality)
-
-        if(response.error){
-            throw response
-        }
-
-        res.json({message:`Producto del carrito actualizado correctamente`})
-
-    } catch (error) {
-        res.status(error.status).json({message:error.msj})
-    }
-})
-
+// Elimina todos los productos de ese carrito.
 router.delete("/:id/deleteProducts",validationId,valitionExistenceCart,async (req,res)=>{
     try {
         const {id} = req.params

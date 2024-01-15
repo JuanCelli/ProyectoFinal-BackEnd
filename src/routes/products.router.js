@@ -1,15 +1,13 @@
 import { Router } from "express";
-import ProductManager from "../daos/managers/ProductManager.fs.js";
 import productModel from "../daos/models/product.model.js";
 import { validationId } from "../middleware/validationId.js";
 import { valitionExistenceProduct } from "../middleware/validationExistenceP.js";
-import { productManagerMongo } from "../daos/managers/productManager.mongo.js";
+import { productManagerMongo } from "../daos/managers/mongo/ProductManager.mongo.js"
 
 
 
 
 const router = Router()
-export const productManager = new ProductManager()
 
 
 // Obtiene producto
@@ -27,10 +25,14 @@ router.get("/", async(req,res)=>{
 
 
 // Obtiene producto por id
-router.get("/:id",validationId,valitionExistenceProduct,async (req, res)=>{
+router.get("/:id",async (req, res)=>{
     try {
         const {id} = req.params
         const product = await productManagerMongo.getProductById(id)
+
+        if(!product){
+            throw {status:404, msj: "Not found"}
+        }
 
         res.json(product)
     } catch (error) {

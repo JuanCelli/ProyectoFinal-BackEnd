@@ -1,17 +1,21 @@
-import { formatPaginationResult } from "../../utils/formatPaginationResult.js"
-import { setPaginationOptions } from "../../utils/setPaginationOptions.js"
-import productModel from "../models/product.model.js"
+import { formatPaginationResult } from "../../../utils/formatPaginationResult.js"
+import productModel from "../../models/product.model.js"
 
 
 
 class ProductManagerMongo{
-    async getProducts (limit, page, query, sort){
+    async getProducts (limit = 10, page = 1, query, sort){
         try {
-            const paginationOptions = setPaginationOptions(limit, page, sort)
+            if(sort=="asc"){
+                sort = {price:1}
+            }else if(sort=="desc"){
+                sort = {price:-1}
+            }
+
             const categoryfilter = query ? {$and:[{category:query},{status:true}]} : {status:true}
 
 
-            const products = await productModel.paginate({...categoryfilter},{...paginationOptions})
+            const products = await productModel.paginate({...categoryfilter},{limit,page,query,sort})
             return formatPaginationResult(products)
 
         } catch (error) {

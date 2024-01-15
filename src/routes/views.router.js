@@ -1,6 +1,7 @@
 import { Router } from "express";
-import ProductManager from "../daos/managers/ProductManager.fs.js";
-import { productManagerMongo } from "../daos/managers/productManager.mongo.js";
+import ProductManager from "../daos/managers/fileSystem/ProductManager.fs.js";
+import { productManagerMongo } from "../daos/managers/mongo/ProductManager.mongo.js";
+import {authSession} from "../middleware/authSession.js"
 
 const productManager = new ProductManager()
 
@@ -14,13 +15,23 @@ router.get("/", (req,res)=>{
 })
 
 
-
-router.get("/products", async (req,res)=>{
+router.get("/products",authSession, async (req,res)=>{
     try {
-        const products = await productManagerMongo.getProducts(1,1)
+        const {limit, page, query, sort} = req.query
+        const productsInDb = await productManagerMongo.getProducts(limit,page,query,sort)
+        const products = productsInDb.payload.map((product)=>(
+            {
+                title: product.title,
+                price: product.price,
+                stock: product.stock,
+            }
+        ))
+        const user = req.session.user
         res.render("products",{
             title:"Productos",
-            products: products.payload
+            products: products,
+            user,
+            role:req.session.role
         })
     } catch (error) {
         console.log(error)
