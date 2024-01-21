@@ -3,6 +3,7 @@ import { userManagerMongo } from "../daos/managers/mongo/UserManager.mongo.js";
 import { validationExistUserRegister } from "../middleware/validationUserExistRegister.js";
 import { validationLogin } from "../middleware/validationLogin.js";
 import { getRoleUser } from "../middleware/getRoleUser.js";
+import createHash from "../utils/createHash.js";
 
 
 const router = Router()
@@ -11,7 +12,15 @@ const router = Router()
 // Register
 router.post("/register",validationExistUserRegister,async(req,res)=>{
     try {
-        const newUser = await userManagerMongo.createUser(req.body)
+        const {first_name,last_name,email,age,password} = req.body
+        const user = {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            age: age,
+            password: createHash(password),
+        }
+        const newUser = await userManagerMongo.createUser(user)
         if(!newUser.status){
             throw ({error: true,status: 400, msj:"El usuario no se ha registrado. Debe ingresar todos los datos requeridos"} )
         }

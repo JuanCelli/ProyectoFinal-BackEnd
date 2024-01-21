@@ -1,3 +1,4 @@
+import isValidPassword from "../../../utils/isValidPassword.js";
 import userModel from "../../models/user.model.js";
 
 class UserManagerMongo{
@@ -15,8 +16,11 @@ class UserManagerMongo{
 
     async login(email, password){
         try {
-            const user = await userModel.findOne({email,password})
+            const user = await userModel.findOne({email})
             if(!user){
+                throw {error: true, status:401, msj: "El usuario o la contraseña no son validos."}
+            }
+            if(!isValidPassword(user,password)){
                 throw {error: true, status:401, msj: "El usuario o la contraseña no son validos."}
             }
             return user

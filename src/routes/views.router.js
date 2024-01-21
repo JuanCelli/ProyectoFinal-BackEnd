@@ -7,15 +7,9 @@ const productManager = new ProductManager()
 
 const router = Router();
 
-router.get("/", (req,res)=>{
-    res.render("home",{
-        title:"Inicio",
-        products:productManager.getProducts()
-    })
-})
 
 
-router.get("/products",authSession, async (req,res)=>{
+const productsView = async (req,res)=>{
     try {
         const {limit, page, query, sort} = req.query
         const productsInDb = await productManagerMongo.getProducts(limit,page,query,sort)
@@ -36,7 +30,14 @@ router.get("/products",authSession, async (req,res)=>{
     } catch (error) {
         console.log(error)
     }
-})
+}
+
+router.get("/", authSession, productsView)
+
+
+router.get("/products",authSession, productsView)
+
+
 
 router.get("/chat", (req,res)=>{
     res.render("chat",{

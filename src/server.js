@@ -43,7 +43,7 @@ app.use("/api/sessions",sessionsRouter)
 app.use("/",viewsRouter)
 app.use("/users",usersViewsRouter)
 
-app.use(express.static(`${rootDir}/public`))
+app.use(express.static(`${rootDir}/../public`))
 
 
 
