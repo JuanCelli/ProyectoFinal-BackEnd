@@ -4,27 +4,16 @@ import { validationExistUserRegister } from "../middleware/validationUserExistRe
 import { validationLogin } from "../middleware/validationLogin.js";
 import { getRoleUser } from "../middleware/getRoleUser.js";
 import createHash from "../utils/createHash.js";
+import passport from "passport";
 
 
 const router = Router()
 
 
 // Register
-router.post("/register",validationExistUserRegister,async(req,res)=>{
+router.post("/register",passport.authenticate("register",{failureRedirect:"/api/sessions/fail-register"}),async(req,res)=>{
     try {
-        const {first_name,last_name,email,age,password} = req.body
-        const user = {
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-            age: age,
-            password: createHash(password),
-        }
-        const newUser = await userManagerMongo.createUser(user)
-        if(!newUser.status){
-            throw ({error: true,status: 400, msj:"El usuario no se ha registrado. Debe ingresar todos los datos requeridos"} )
-        }
-        res.json(newUser)
+        res.status(201).json({msj: "Usuario registrado con éxito."})
     } catch (error) {
         res.status(error.status).json({error: error.msj})
     }
@@ -32,11 +21,10 @@ router.post("/register",validationExistUserRegister,async(req,res)=>{
 
 
 // Login
-router.post("/login",validationLogin,getRoleUser,async(req,res)=>{
+router.post("/login",passport.authenticate("login",{failureRedirect:"/api/sessions/fail-login"}),getRoleUser,async(req,res)=>{
     try {
 
         req.session.user = req.user
-
         res.json({msj: "Bienvenido, has ingreseado correctamente."})
     } catch (error) {
         res.json({error: error})
@@ -53,5 +41,12 @@ router.post("/logout",(req,res)=>{
     })
 })
 
+router.get("/fail-login", (req,res)=>{
+    res.status(401).send({error:"No ha podido ingresar con éxito."})
+})
+
+router.get("/fail-register", (req,res)=>{
+    res.status(400).send({error:"No ha podido registrar con éxito."})
+})
 
 export default router

@@ -13,6 +13,8 @@ import { dbName, password, userName } from './env.js'
 import messageModel from './daos/models/message.model.js'
 import MongoStore from 'connect-mongo'
 import cookieParser from 'cookie-parser'
+import initializePassport from './config/passport.config.js'
+import passport from 'passport'
 
 
 
@@ -36,6 +38,9 @@ app.use(session(
     }
 ))
 
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use("/api/products",productsRouter)
 app.use("/api/carts",cartRouter)
@@ -44,7 +49,6 @@ app.use("/",viewsRouter)
 app.use("/users",usersViewsRouter)
 
 app.use(express.static(`${rootDir}/../public`))
-
 
 
 

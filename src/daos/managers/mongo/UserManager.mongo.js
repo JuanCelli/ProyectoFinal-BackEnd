@@ -13,6 +13,17 @@ class UserManagerMongo{
             return error
         }
     }
+    async getUserById(id){
+        try {
+            const user = await userModel.findOne({_id:id})
+            if(!user){
+                throw {error: true, status:404, msj: "Not found"}
+            }
+            return user
+        } catch (error){
+            return error
+        }
+    }
 
     async login(email, password){
         try {

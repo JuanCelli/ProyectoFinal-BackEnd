@@ -1,0 +1,65 @@
+[33mcommit b1bd3320e4412f6e95898d9cd474482d0f10fc5b[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Juan Celli <juanicelli@gmail.com>
+Date:   Sun Jan 21 19:12:31 2024 -0300
+
+    Se implementa bcrypto y hash en password
+
+[33mcommit abd73dd6ee21bdea2d515bc0a121dbe2bbd05666[m
+Author: Juan Celli <juanicelli@gmail.com>
+Date:   Mon Jan 15 11:43:32 2024 -0300
+
+    Se agrega login, register y session con persistencia en db
+
+[33mcommit 2f4f63cc9138ab276af15f2f7598f075a28b49c2[m
+Author: Juan Celli <juanicelli@gmail.com>
+Date:   Wed Dec 27 23:52:03 2023 -0300
+
+    Se agrega vista de productos con hbs
+
+[33mcommit d634d7d4f226d4b4b3fa6f864c41f8592d968d6e[m
+Author: Juan Ignacio Celli <jcelli@giga.com>
+Date:   Wed Dec 27 21:32:29 2023 -0300
+
+    Se agrega populate
+
+[33mcommit b2fccfa88612d7da95acdede9a7d575fc8a33de4[m
+Author: Juan Celli <juanicelli@gmail.com>
+Date:   Wed Dec 27 14:36:17 2023 -0300
+
+    Se agregan CRUD con mongoose, se agrega pagination
+
+[33mcommit 7dd3d323c535224e4ef8689ba2b0c575a1a8731b[m
+Author: Juan Celli <juanicelli@gmail.com>
+Date:   Wed Dec 20 08:10:47 2023 -0300
+
+    Se agrega conexión a DB con mongoose, se agrega sala de chat
+
+[33mcommit 1359156c15c76bea3334cd5e8aed20edb48027d9[m
+Author: Juan Celli <juanicelli@gmail.com>
+Date:   Tue Dec 19 14:24:32 2023 -0300
+
+    Se agrega persistencia de datos de cart y productos con mongoose
+
+[33mcommit 754a54abd83a8e8a7f4ea9f1a65c95b53b31e4b8[m[33m ([m[1;31morigin/Websockets[m[33m, [m[1;32mWebsockets[m[33m)[m
+Author: JuanCelli <juanicelli@gmail.com>
+Date:   Mon Dec 4 01:20:15 2023 -0300
+
+    Se agrega Websockets
+
+[33mcommit 62a02b1e8014a00758c05676585348a7e3b1cb6c[m
+Author: Juan Celli <juanicelli@gmail.com>
+Date:   Sun Dec 3 14:09:47 2023 -0300
+
+    Agrego motor de plantillas
+
+[33mcommit 07f47d971abec0da4575a41fc6e33e4984ee1c33[m
+Author: JuanCelli <juanicelli@gmail.com>
+Date:   Thu Nov 23 01:49:58 2023 -0300
+
+    Primera entrega (Finalizado)
+
+[33mcommit b60022eda309afc287a8a111dd2bd6c7af02f230[m
+Author: JuanCelli <juanicelli@gmail.com>
+Date:   Wed Nov 22 23:57:25 2023 -0300
+
+    Primera entrega

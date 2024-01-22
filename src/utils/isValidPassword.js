@@ -1,10 +1,7 @@
 import bcrypt from "bcrypt"
 
 const isValidPassword = (user,password) => {
-    console.log("asdasdasdasd")
-    const response = bcrypt.compareSync(password, user.password)
-    console.log(response)
-	return response
+    return bcrypt.compareSync(password, user.password)
 }
 
 export default isValidPassword
