@@ -3,6 +3,8 @@ import local from "passport-local"
 import { userManagerMongo } from '../daos/managers/mongo/UserManager.mongo.js'
 import createHash from '../utils/createHash.js'
 
+import GitHubStrategy from 'passport-github2'
+
 const LocalStrategy = local.Strategy
 const initializePassport = () =>{
     passport.use("register", new LocalStrategy(
@@ -44,6 +46,38 @@ const initializePassport = () =>{
                 req.user = user
                 return done(null, user)
             } catch (error) {
+                return done(error)
+            }
+        }
+    ))
+
+    passport.use("github", new GitHubStrategy(
+        {clientID: "Iv1.9bfe7bffb7318b20",
+        clientSecret:"53e7964ac483f7e40217172f977e4f91dd1fa746",
+        callbackURL:"http://localhost:8080/api/sessions/githubcallback"
+        }, async (accessToken,refreshToken,profile,done) =>{
+            console.log(profile)
+            try {
+                const user = await userManagerMongo.getUserByEmail(profile._json.email)
+                console.log(user)
+                if(user.error){
+                    console.log("ASDASDASDASD")
+                    const newUser = {
+                        first_name: profile._json.name,
+                        last_name: "",
+                        age: 20,
+                        password:"",
+                        loggedBy:"GitHub"
+                    }
+                    const response = await userManagerMongo.createUser(newUser)
+                    if(response.error){
+                        return done(null,false)
+                    }
+                    req.user = newUser
+                    return done(null, response)
+                }
+                return done(null,false)
+            }catch (error) {
                 return done(error)
             }
         }

@@ -41,6 +41,21 @@ router.post("/logout",(req,res)=>{
     })
 })
 
+router.get("/github-login",passport.authenticate("github"), async(req,res)=>{
+    try {
+        req.session.user = req.user
+    } catch (error) {
+        console.log(error)
+    }
+})
+router.get("/githubcallback",passport.authenticate("github"), async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+})
+
 router.get("/fail-login", (req,res)=>{
     res.status(401).send({error:"No ha podido ingresar con éxito."})
 })

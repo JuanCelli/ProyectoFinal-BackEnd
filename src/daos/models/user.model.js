@@ -7,7 +7,8 @@ const userSchema = new Schema({
     email: {type:String, required: true},
     age: {type:Number, required: true},
     password: {type:String, required: true},
-    status:{type: Boolean,default: true}
+    status:{type: Boolean,default: true},
+    loggedBy:{type: String,default: "Local"},
 })
 
 
