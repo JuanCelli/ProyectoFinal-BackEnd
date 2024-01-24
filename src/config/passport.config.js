@@ -56,27 +56,23 @@ const initializePassport = () =>{
         clientSecret:"53e7964ac483f7e40217172f977e4f91dd1fa746",
         callbackURL:"http://localhost:8080/api/sessions/githubcallback"
         }, async (accessToken,refreshToken,profile,done) =>{
-            console.log(profile)
             try {
                 const user = await userManagerMongo.getUserByEmail(profile._json.email)
-                console.log(user)
+
                 if(user.error){
-                    console.log("ASDASDASDASD")
                     const newUser = {
                         first_name: profile._json.name,
                         last_name: "",
                         age: 20,
-                        password:"",
+                        email: profile._json.email,
+                        password:createHash(""),
                         loggedBy:"GitHub"
                     }
                     const response = await userManagerMongo.createUser(newUser)
-                    if(response.error){
-                        return done(null,false)
-                    }
-                    req.user = newUser
+                    if(response.error) return done(null,false)
                     return done(null, response)
                 }
-                return done(null,false)
+                return done(null,user)
             }catch (error) {
                 return done(error)
             }

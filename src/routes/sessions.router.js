@@ -1,15 +1,9 @@
 import { Router } from "express";
-import { userManagerMongo } from "../daos/managers/mongo/UserManager.mongo.js";
-import { validationExistUserRegister } from "../middleware/validationUserExistRegister.js";
-import { validationLogin } from "../middleware/validationLogin.js";
 import { getRoleUser } from "../middleware/getRoleUser.js";
-import createHash from "../utils/createHash.js";
 import passport from "passport";
 
 
 const router = Router()
-
-
 // Register
 router.post("/register",passport.authenticate("register",{failureRedirect:"/api/sessions/fail-register"}),async(req,res)=>{
     try {
@@ -32,6 +26,7 @@ router.post("/login",passport.authenticate("login",{failureRedirect:"/api/sessio
     }
 })
 
+//Register
 router.post("/logout",(req,res)=>{
 	req.session.destroy(error=>{
 		if(error){
@@ -41,25 +36,25 @@ router.post("/logout",(req,res)=>{
     })
 })
 
-router.get("/github-login",passport.authenticate("github"), async(req,res)=>{
+
+//Login y register con GitHub
+router.get("/github-login",passport.authenticate("github",{ scope: ['user:email'] }))
+
+router.get("/githubcallback",passport.authenticate("github",{failureRedirect:"/api/sessions/fail-login"}), getRoleUser, async(req,res)=>{
     try {
         req.session.user = req.user
+        res.redirect("/products")
     } catch (error) {
         console.log(error)
     }
 })
-router.get("/githubcallback",passport.authenticate("github"), async(req,res)=>{
-    try {
-        
-    } catch (error) {
-        
-    }
-})
 
+//Error de login
 router.get("/fail-login", (req,res)=>{
     res.status(401).send({error:"No ha podido ingresar con éxito."})
 })
 
+//Error de register
 router.get("/fail-register", (req,res)=>{
     res.status(400).send({error:"No ha podido registrar con éxito."})
 })
