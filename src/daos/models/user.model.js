@@ -9,6 +9,7 @@ const userSchema = new Schema({
     password: String,
     status:{type: Boolean,default: true},
     loggedBy:{type: String,default: "Local"},
+    role:{type:String, default:"user"}
 })
 
 

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authSession } from "../middleware/authSession.js";
+import { passportCall } from "../passport/passportCall.js";
 
 const router = Router()
 
@@ -15,12 +16,10 @@ router.get("/login",(req,res)=>{
     })
 })
 
-router.get("/",authSession,(req,res)=>{
-    const user = req.session.user
+router.get("/",passportCall("current",{failureRedirect: '/users/login'}),(req,res)=>{
     res.render("profile",{
         title:"Perfil",
-        user,
-        role:req.session.role
+        user: req.user
     })
 })
 

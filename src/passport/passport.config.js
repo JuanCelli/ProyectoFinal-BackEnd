@@ -4,9 +4,43 @@ import { userManagerMongo } from '../daos/managers/mongo/UserManager.mongo.js'
 import createHash from '../utils/createHash.js'
 
 import GitHubStrategy from 'passport-github2'
+import isValidPassword from '../utils/isValidPassword.js'
+import jwtStrategy from 'passport-jwt';
+import { PRIVATE_KEY } from '../utils/generateToken.js'
+
+
+
+const JwtStrategy = jwtStrategy.Strategy;
+const ExtractJWT = jwtStrategy.ExtractJwt;
 
 const LocalStrategy = local.Strategy
 const initializePassport = () =>{
+
+    const cookieExtractor = req => {
+        let token = null;
+        if (req && req.cookies) {
+            token = req.cookies['jwtCookieToken']
+        }
+        return token;
+    };
+
+    passport.use('current', new JwtStrategy(
+        {
+            jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+            secretOrKey: PRIVATE_KEY
+        }, async (jwt_payload, done) => {
+            try {
+                return done(null, jwt_payload.user)
+            } catch (error) {
+                return done(error)
+            }
+        }
+    ));
+
+
+
+
+
     passport.use("register", new LocalStrategy(
         {passReqToCallback:true, usernameField:"email"}, async (req,username,password,done) =>{
             try {
@@ -39,8 +73,11 @@ const initializePassport = () =>{
         {passReqToCallback:true, usernameField:"email"}, async (req,username,password,done) =>{
             try {
                 const {email,password} = req.body
-                const user = await userManagerMongo.login(email,password)
-                if(user.error){
+                const user = await userManagerMongo.getUserByEmail(email)
+                if(!user){
+                    return done(null, false)
+                }
+                if(!isValidPassword(user,password)){
                     return done(null, false)
                 }
                 req.user = user
@@ -92,6 +129,9 @@ const initializePassport = () =>{
           console.error("Error deserializing user " + error);
         }
       });
+
+
+
 }
 
 export default initializePassport

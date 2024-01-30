@@ -13,7 +13,7 @@ import { dbName, password, userName } from './env.js'
 import messageModel from './daos/models/message.model.js'
 import MongoStore from 'connect-mongo'
 import cookieParser from 'cookie-parser'
-import initializePassport from './config/passport.config.js'
+import initializePassport from './passport/passport.config.js'
 import passport from 'passport'
 
 

@@ -2,11 +2,11 @@ import { Router } from "express";
 import ProductManager from "../daos/managers/fileSystem/ProductManager.fs.js";
 import { productManagerMongo } from "../daos/managers/mongo/ProductManager.mongo.js";
 import {authSession} from "../middleware/authSession.js"
+import { passportCall } from "../passport/passportCall.js";
 
 const productManager = new ProductManager()
 
 const router = Router();
-
 
 
 const productsView = async (req,res)=>{
@@ -20,22 +20,21 @@ const productsView = async (req,res)=>{
                 stock: product.stock,
             }
         ))
-        const user = req.session.user
+        const user = req.user
         res.render("products",{
             title:"Productos",
             products: products,
-            user,
-            role:req.session.role
+            user
         })
     } catch (error) {
         console.log(error)
     }
 }
 
-router.get("/", authSession, productsView)
+router.get("/", passportCall("current",{failureRedirect: '/users/login'}), productsView)
 
 
-router.get("/products",authSession, productsView)
+router.get("/products",passportCall("current",{failureRedirect: '/users/login'}), productsView)
 
 
 
