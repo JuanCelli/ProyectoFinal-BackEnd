@@ -1,10 +1,8 @@
 import { Router } from "express";
-import ProductManager from "../daos/managers/fileSystem/ProductManager.fs.js";
 import { productManagerMongo } from "../daos/managers/mongo/ProductManager.mongo.js";
 import {authSession} from "../middleware/authSession.js"
 import { passportCall } from "../passport/passportCall.js";
 
-const productManager = new ProductManager()
 
 const router = Router();
 

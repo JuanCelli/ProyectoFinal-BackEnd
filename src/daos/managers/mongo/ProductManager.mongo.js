@@ -4,6 +4,7 @@ import productModel from "../../models/product.model.js"
 
 
 class ProductManagerMongo{
+
     async getProducts (limit = 10, page = 1, query, sort){
         try {
             if(sort=="asc"){

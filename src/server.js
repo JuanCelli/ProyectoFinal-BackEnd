@@ -9,16 +9,16 @@ import hanblebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import session from 'express-session'
-import { dbName, password, userName } from './env.js'
 import messageModel from './daos/models/message.model.js'
 import MongoStore from 'connect-mongo'
 import cookieParser from 'cookie-parser'
 import initializePassport from './passport/passport.config.js'
 import passport from 'passport'
+import config from './config/config.js'
 
 
 
-const mongoUrlDb = `mongodb+srv://userTest:${password}@ecommerce.4o9gdn5.mongodb.net/${dbName}?retryWrites=true&w=majority`
+const mongoUrlDb = config.urlMongo
 const app = express()
 
 app.use(cookieParser())
@@ -63,7 +63,7 @@ app.set("view engine","hbs")
 app.set(`views`,`${rootDir}/views`)
 
 
-const PORT = 8080
+const PORT = config.port
 const httpServer = app.listen(PORT,()=>{
     console.log(`Servidor escuchando en el puerto ${PORT}`)
 })

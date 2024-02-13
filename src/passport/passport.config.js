@@ -74,9 +74,11 @@ const initializePassport = () =>{
             try {
                 const {email,password} = req.body
                 const user = await userManagerMongo.getUserByEmail(email)
-                if(!user){
+                if(user.error){
                     return done(null, false)
                 }
+                console.log(user)
+                console.log(password)
                 if(!isValidPassword(user,password)){
                     return done(null, false)
                 }

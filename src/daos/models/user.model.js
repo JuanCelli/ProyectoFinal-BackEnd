@@ -4,9 +4,9 @@ import { Schema, model } from "mongoose";
 const userSchema = new Schema({
     first_name: {type:String, required: true},
     last_name: String,
-    email: String,
+    email: {type:String, required: true,unique:true},
     age: {type:Number, required: true},
-    password: String,
+    password: {type:String, required: true},
     status:{type: Boolean,default: true},
     loggedBy:{type: String,default: "Local"},
     role:{type:String, default:"user"}
