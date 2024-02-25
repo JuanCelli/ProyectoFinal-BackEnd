@@ -1,4 +1,4 @@
-import userModel from "../../models/user.model.js";
+import userModel from "./models/user.model.js";
 
 class UserManagerMongo{
     async getUserByEmail(email){
@@ -35,4 +35,4 @@ class UserManagerMongo{
 }
 
 
-export const userManagerMongo = new UserManagerMongo()
+export const userService = new UserManagerMongo()

@@ -1,4 +1,4 @@
-import { formatPaginationResult } from "../../../utils/formatPaginationResult.js"
+import { formatPaginationResult } from "../../utils/formatPaginationResult.js"
 import productModel from "../../models/product.model.js"
 
 
@@ -69,4 +69,4 @@ class ProductManagerMongo{
 
 
 
-export const productManagerMongo = new ProductManagerMongo()
+export const productService = new ProductManagerMongo()

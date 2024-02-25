@@ -134,4 +134,4 @@ class CartManagerMongo{
 
 }
 
-export const cartManagerMongo = new CartManagerMongo()
+export const cartService = new CartManagerMongo()

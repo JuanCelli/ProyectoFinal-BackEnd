@@ -1,6 +1,6 @@
 import passport from 'passport'
 import local from "passport-local"
-import { userManagerMongo } from '../daos/managers/mongo/UserManager.mongo.js'
+import { userService } from '../services/mongo/user.service.js'
 import createHash from '../utils/createHash.js'
 
 import GitHubStrategy from 'passport-github2'
@@ -46,7 +46,7 @@ const initializePassport = () =>{
             try {
                 const {first_name,last_name,email,age,password} = req.body
 
-                const userRegistered = await userManagerMongo.getUserByEmail(email)
+                const userRegistered = await userService.getUserByEmail(email)
 
                 if(!userRegistered.error){
                     return done(null, false)
@@ -58,7 +58,7 @@ const initializePassport = () =>{
                     age: age,
                     password: createHash(password),
                 }
-                const newUser = await userManagerMongo.createUser(user)
+                const newUser = await userService.createUser(user)
                 if(!newUser.status){
                     return done(null, false)
                 }
@@ -73,7 +73,7 @@ const initializePassport = () =>{
         {passReqToCallback:true, usernameField:"email"}, async (req,username,password,done) =>{
             try {
                 const {email,password} = req.body
-                const user = await userManagerMongo.getUserByEmail(email)
+                const user = await userService.getUserByEmail(email)
                 if(user.error){
                     return done(null, false)
                 }
@@ -96,7 +96,7 @@ const initializePassport = () =>{
         callbackURL:"http://localhost:8080/api/sessions/githubcallback"
         }, async (accessToken,refreshToken,profile,done) =>{
             try {
-                const user = await userManagerMongo.getUserByEmail(profile._json.email)
+                const user = await userService.getUserByEmail(profile._json.email)
 
                 if(user.error){
                     const newUser = {
@@ -107,7 +107,7 @@ const initializePassport = () =>{
                         password:createHash(""),
                         loggedBy:"GitHub"
                     }
-                    const response = await userManagerMongo.createUser(newUser)
+                    const response = await userService.createUser(newUser)
                     if(response.error) return done(null,false)
                     return done(null, response)
                 }
@@ -125,7 +125,7 @@ const initializePassport = () =>{
 
       passport.deserializeUser(async (id, done) => {
         try {
-          let user = await userManagerMongo.getUserById(id)
+          let user = await userService.getUserById(id)
           done(null, user);
         } catch (error) {
           console.error("Error deserializing user " + error);
