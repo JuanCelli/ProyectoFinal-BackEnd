@@ -1,3 +1,4 @@
+import userTokenDto from "../services/dto/userToken.dto.js"
 import { generateToken } from "../utils/generateToken.js"
 
 export const register = (req, res) => {
@@ -9,13 +10,7 @@ export const register = (req, res) => {
 }
 export const login = (req, res) => {
     try {
-        const userToken = {
-            first_name: req.user.first_name,
-            last_name: req.user.last_name,
-            email: req.user.email,
-            age: req.user.age,
-            role: req.user.role
-        }
+        const userToken = new userTokenDto(req.user)
         const access_token = generateToken(userToken);
         res.cookie('jwtCookieToken', access_token,
         {
@@ -39,13 +34,7 @@ export const logout = (req, res) => {
 }
 export const githubCallback = async (req, res) => {
     try {
-        const userToken = {
-            first_name: req.user.first_name,
-            last_name: req.user.last_name,
-            email: req.user.email,
-            age: req.user.age,
-            role: req.user.role
-        }
+        const userToken = new userTokenDto(req.user)
         const access_token = generateToken(userToken);
         res.cookie('jwtCookieToken', access_token,
         {

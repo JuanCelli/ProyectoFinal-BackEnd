@@ -9,7 +9,6 @@ import hanblebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import session from 'express-session'
-import messageModel from './daos/models/message.model.js'
 import MongoStore from 'connect-mongo'
 import cookieParser from 'cookie-parser'
 import initializePassport from './passport/passport.config.js'
@@ -77,32 +76,3 @@ mongoose.connect(mongoUrlDb)
     .catch((error)=>{
         console.log(error)
     })
-
-
-
-
-socketServer.on("connection",(socketClient)=>{
-    console.log("Nuevo usuario conectado")
-
-    socketClient.on("message", async (data)=>{
-        try {
-            const newMessage = await messageModel.create(data)
-            updateMessagesToClient()
-
-        } catch (error) {
-            console.log(error)
-        }
-    })
-
-    updateMessagesToClient()
-})
-
-export const updateMessagesToClient = async () =>{
-    try {
-        const message = await messageModel.find()
-        socketServer.emit("update_messages",message)
-    } catch (error) {
-        console.log(error)
-    }
-
-}

@@ -35,4 +35,4 @@ class UserManagerMongo{
 }
 
 
-export const userService = new UserManagerMongo()
+export const userManagerMongo = new UserManagerMongo()

@@ -1,12 +1,14 @@
-import { productManagerMongo } from "../daos/managers/mongo/ProductManager.mongo.js"
-import productModel from "../daos/models/product.model.js"
+import { productsService } from "../services/service.js"
+
+
+
 
 export const getProducts = async (req, res) => {
     try {
         const {limit, page,query,sort} = req.query
 
 
-        const products = await productManagerMongo.getProducts(limit, page, query, sort)
+        const products = await productsService.getProducts(limit, page, query, sort)
         res.json(products)
     } catch (error) {
         res.json(error)
@@ -15,7 +17,7 @@ export const getProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
     try {
         const {id} = req.params
-        const product = await productManagerMongo.getProductById(id)
+        const product = await productsService.getProductById(id)
 
         if(!product){
             throw {status:404, msj: "Not found"}
@@ -28,7 +30,7 @@ export const getProductById = async (req, res) => {
 }
 export const createProduct = async (req, res) => {
     try {
-        const product = await productManagerMongo.createProduct(req.body)
+        const product = await productsService.createProduct(req.body)
 
         if (!product.status){
             throw {status:400, msj: "No se pudo agregar el producto"}
@@ -43,7 +45,7 @@ export const updateProduct = async (req, res) => {
         const {id} = req.params
 
         const newProduct = req.body
-        const response = await productManagerMongo.updateProduct(id, newProduct)
+        const response = await productsService.updateProduct(id, newProduct)
 
         if(response.error){
             throw response
@@ -59,7 +61,7 @@ export const deleteProduct = async (req, res) => {
     try{
         const {id} = req.params
 
-        const response = await productModel.updateOne({_id: id}, {status:false})
+        const response = await productsService.deleteProduct({_id: id}, {status:false})
 
         if(response.error){
             throw response

@@ -1,7 +1,9 @@
 import { Router } from "express";
 import { validationId } from "../middleware/validationId.js";
 import { valitionExistenceCart } from "../middleware/validationExistenceC.js";
-import { getCartById,createCart,addProductById,updateQuantityProductInCart,incrementQuantityProductInCart,updateCart,deleteCartById,deleteProductFromCart,deleteAllProductFromCart} from "../controllers/carts.controller.js";
+import { getCartById,createCart,addProductById,updateQuantityProductInCart,incrementQuantityProductInCart,updateCart,deleteCartById,deleteProductFromCart,deleteAllProductFromCart,purchaseCart} from "../controllers/carts.controller.js";
+import {passportCall} from "../passport/passportCall.js"
+
 
 const router = Router()
 
@@ -14,7 +16,7 @@ router.get("/:id",validationId,getCartById)
 router.post("/",createCart)
 
 // Agrega un producto a un carrito por id, si ya existe en ese carrito le aumento 1 la quantity.
-router.post("/:id/product/:pid",validationId,valitionExistenceCart,addProductById)
+router.post("/:id/product/:pid",passportCall("current",{},"user"),validationId,valitionExistenceCart,addProductById)
 
 // Actualiza la quality de un product por su id.
 router.put("/:id/product/:pid",validationId,valitionExistenceCart,updateQuantityProductInCart)
@@ -35,6 +37,9 @@ router.delete("/:id/product/:pid",validationId,valitionExistenceCart,deleteProdu
 
 // Elimina todos los productos de ese carrito.
 router.delete("/:id/deleteProducts",validationId,valitionExistenceCart,deleteAllProductFromCart)
+
+// Finaliza la compra del carrito, genera y guarda tkt.
+router.post("/:id/purchase",validationId,valitionExistenceCart,purchaseCart)
 
 
 export default router

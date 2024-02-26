@@ -1,5 +1,6 @@
-import cartModel from "../../models/cart.model.js"
-import { productManagerMongo } from "./ProductManager.mongo.js"
+import { productsService } from "../../service.js"
+import cartModel from "./models/cart.model.js"
+
 
 class CartManagerMongo{
     async getCartById(id){
@@ -28,7 +29,7 @@ class CartManagerMongo{
     async addProductToCart(id, pid){
         try {
 
-            const product = await productManagerMongo.getProductById(pid)
+            const product = await productsService.getProductById(pid)
             if(!product){
                 throw {error: true,status:404, msj: "Producto no encontrado"}
             }
@@ -134,4 +135,4 @@ class CartManagerMongo{
 
 }
 
-export const cartService = new CartManagerMongo()
+export const cartManagerMongo = new CartManagerMongo()

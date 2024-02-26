@@ -1,13 +1,12 @@
 import passport from 'passport'
 import local from "passport-local"
-import { userService } from '../services/mongo/user.service.js'
 import createHash from '../utils/createHash.js'
 
 import GitHubStrategy from 'passport-github2'
 import isValidPassword from '../utils/isValidPassword.js'
 import jwtStrategy from 'passport-jwt';
 import { PRIVATE_KEY } from '../utils/generateToken.js'
-
+import { userService } from '../services/service.js'
 
 
 const JwtStrategy = jwtStrategy.Strategy;
@@ -30,6 +29,7 @@ const initializePassport = () =>{
             secretOrKey: PRIVATE_KEY
         }, async (jwt_payload, done) => {
             try {
+                console.log(jwt_payload.user)
                 return done(null, jwt_payload.user)
             } catch (error) {
                 return done(error)
@@ -77,8 +77,6 @@ const initializePassport = () =>{
                 if(user.error){
                     return done(null, false)
                 }
-                console.log(user)
-                console.log(password)
                 if(!isValidPassword(user,password)){
                     return done(null, false)
                 }

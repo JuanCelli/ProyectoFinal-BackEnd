@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { productManagerMongo } from "../daos/managers/mongo/ProductManager.mongo.js";
-import {authSession} from "../middleware/authSession.js"
 import { passportCall } from "../passport/passportCall.js";
+import { productsService } from "../services/service.js";
 
 
 const router = Router();
@@ -10,7 +9,7 @@ const router = Router();
 const productsView = async (req,res)=>{
     try {
         const {limit, page, query, sort} = req.query
-        const productsInDb = await productManagerMongo.getProducts(limit,page,query,sort)
+        const productsInDb = await productsService.getProducts(limit,page,query,sort)
         const products = productsInDb.payload.map((product)=>(
             {
                 title: product.title,

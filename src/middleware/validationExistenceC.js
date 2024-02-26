@@ -1,11 +1,13 @@
-import cartModel from "../daos/models/cart.model.js";
-cartModel
+
+import { cartService } from "../services/service.js";
+
+
 export  const  valitionExistenceCart = async (req, res, next) => {
     try {
         const { id } = req.params
-        const product = await cartModel.findOne({$and:[{_id: id},{status:true}]})
+        const cart = await cartService.getCartById(id)
 
-        if(!product){
+        if(cart.error){
             throw {status:404, msj: "Not found"}
         }
 

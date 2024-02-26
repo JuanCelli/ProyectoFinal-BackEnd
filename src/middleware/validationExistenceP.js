@@ -1,9 +1,10 @@
-import productModel from "../daos/models/product.model.js";
+import { productsService } from "../services/service.js";
+
 
 export  const  valitionExistenceProduct = async (req, res, next) => {
     try {
         const { id } = req.params
-        const product = await productModel.findOne({$and:[{_id: id},{status:true}]})
+        const product = await productsService.getProductById(id)
 
         if(!product){
             throw {status:404, msj: "Not found"}

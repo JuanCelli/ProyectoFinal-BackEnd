@@ -2,6 +2,7 @@ import { Router } from "express";
 import { validationId } from "../middleware/validationId.js";
 import { valitionExistenceProduct } from "../middleware/validationExistenceP.js";
 import { getProducts,getProductById,createProduct,updateProduct,deleteProduct} from "../controllers/products.controller.js";
+import { passportCall } from "../passport/passportCall.js";
 
 
 const router = Router()
@@ -15,15 +16,17 @@ router.get("/",getProducts)
 router.get("/:id",getProductById)
 
 //Agrega un producto
-router.post("/",createProduct)
+router.post("/",passportCall("current",{},"admin"),createProduct)
+
+
 
 
 //Actualiza producto por id y por campo de body
-router.put("/:id",validationId,valitionExistenceProduct,updateProduct)
+router.put("/:id",passportCall("current",{},"admin"),validationId,valitionExistenceProduct,updateProduct)
 
 
 //Elimina producto por id.
-router.delete("/:id",validationId,valitionExistenceProduct,deleteProduct)
+router.delete("/:id",passportCall("current",{},"admin"),validationId,valitionExistenceProduct,deleteProduct)
 
 
 export default router
