@@ -1,6 +1,11 @@
 import { productsService } from "../services/service.js"
+import { generateMockProducts } from "../utils/generateMockProducts.js"
 
+import CustomError from "../services/errors/CustomError.js"
+import { generateProductCreateErrorInfo } from "../services/errors/messages/productCreateErrorInfo.js"
+import errorsEnum from "../services/errors/errors.enum.js"
 
+CustomError
 
 
 export const getProducts = async (req, res) => {
@@ -33,11 +38,16 @@ export const createProduct = async (req, res) => {
         const product = await productsService.createProduct(req.body)
 
         if (!product.status){
-            throw {status:400, msj: "No se pudo agregar el producto"}
+            CustomError.createError({
+                name:"Product Create Error",
+                cause:generateProductCreateErrorInfo(req.body),
+                message:"Error al intentarcrear producto",
+                code: errorsEnum.INVALID_TYPES_ERROR
+            })
         }
         res.json(product)
     } catch (error) {
-        res.status(error.status).json({message:error.msj})
+        res.json({message:error.msj})
     }
 }
 export const updateProduct = async (req, res) => {
@@ -71,5 +81,22 @@ export const deleteProduct = async (req, res) => {
     }catch (error) {
         console.log(error)
         res.status(error.status).json({message:error.msj})
+    }
+}
+
+
+export const getMockingProducts = async (req, res) => {
+    try {
+        const {amount} = req.query
+        let amountNumber = Number(amount)
+
+
+        if(isNaN(amountNumber) || amountNumber < 1){
+            amountNumber = undefined
+        }
+
+        res.json(generateMockProducts(amountNumber))
+    } catch (error) {
+        res.json(error)
     }
 }
