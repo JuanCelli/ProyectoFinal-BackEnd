@@ -5,8 +5,6 @@ import CustomError from "../services/errors/CustomError.js"
 import { generateProductCreateErrorInfo } from "../services/errors/messages/productCreateErrorInfo.js"
 import errorsEnum from "../services/errors/errors.enum.js"
 
-CustomError
-
 
 export const getProducts = async (req, res) => {
     try {
@@ -41,13 +39,14 @@ export const createProduct = async (req, res) => {
             CustomError.createError({
                 name:"Product Create Error",
                 cause:generateProductCreateErrorInfo(req.body),
-                message:"Error al intentarcrear producto",
-                code: errorsEnum.INVALID_TYPES_ERROR
+                message:"Error al intentar crear producto",
+                code: errorsEnum.INVALID_TYPES_ERROR,
             })
         }
         res.json(product)
     } catch (error) {
-        res.json({message:error.msj})
+        console.error(error)
+        res.status(400).json({error:error.name,message:error.message})
     }
 }
 export const updateProduct = async (req, res) => {

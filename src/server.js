@@ -14,7 +14,6 @@ import cookieParser from 'cookie-parser'
 import initializePassport from './passport/passport.config.js'
 import passport from 'passport'
 import config from './config/config.js'
-import errorHandle from "./services/errors/middlewares/index.js"
 
 
 
@@ -49,7 +48,6 @@ app.use("/",viewsRouter)
 app.use("/users",usersViewsRouter)
 
 
-app.use(errorHandle)
 
 app.use(express.static(`${rootDir}/../public`))
 

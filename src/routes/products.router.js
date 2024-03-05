@@ -17,8 +17,7 @@ router.get("/mockingproducts",getMockingProducts)
 router.get("/:id",getProductById)
 
 //Agrega un producto
-router.post("/",createProduct)
-// router.post("/",passportCall("current",{},"admin"),createProduct)
+router.post("/",passportCall("current",{},"admin"),createProduct)
 
 
 
