@@ -6,7 +6,7 @@ import { generateProductCreateErrorInfo } from "../services/errors/messages/prod
 import errorsEnum from "../services/errors/errors.enum.js"
 
 
-export const getProducts = async (req, res) => {
+export const getProducts = async (req, res,next) => {
     try {
         const {limit, page,query,sort} = req.query
 
@@ -14,24 +14,29 @@ export const getProducts = async (req, res) => {
         const products = await productsService.getProducts(limit, page, query, sort)
         res.json(products)
     } catch (error) {
-        res.json(error)
+        next(error)
     }
 }
-export const getProductById = async (req, res) => {
+export const getProductById = async (req, res,next) => {
     try {
         const {id} = req.params
         const product = await productsService.getProductById(id)
 
         if(!product){
-            throw {status:404, msj: "Not found"}
+            CustomError.createError({
+                name:"Product Get Error",
+                cause:null,
+                message:"Producto no econtrado",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
         }
 
         res.json(product)
     } catch (error) {
-        res.json(error)
+        next(error)
     }
 }
-export const createProduct = async (req, res) => {
+export const createProduct = async (req, res,next) => {
     try {
         const product = await productsService.createProduct(req.body)
 
@@ -45,11 +50,10 @@ export const createProduct = async (req, res) => {
         }
         res.json(product)
     } catch (error) {
-        console.error(error)
-        res.status(400).json({error:error.name,message:error.message})
+        next(error)
     }
 }
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res,next) => {
     try{
         const {id} = req.params
 
@@ -57,29 +61,39 @@ export const updateProduct = async (req, res) => {
         const response = await productsService.updateProduct(id, newProduct)
 
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Product Update Error",
+                cause:null,
+                message:"Error al intentar actualizar producto",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
 
         res.json({message: `Producto actualizado con éxito (ID: ${id})`})
 
     }catch (error) {
-        res.status(error.status).json({message:error.msj})
+        next(error)
     }
 }
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res,next) => {
     try{
         const {id} = req.params
 
         const response = await productsService.deleteProduct({_id: id}, {status:false})
 
+        req.logger.debug("Gola")
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Product Delete Error",
+                cause:null,
+                message:"Error al intentar eliminar producto",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
 
         res.json({message: `Producto eliminado con éxito (ID: ${id})`})
     }catch (error) {
-        console.log(error)
-        res.status(error.status).json({message:error.msj})
+        next(error)
     }
 }
 

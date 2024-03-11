@@ -17,7 +17,9 @@ router.get("/mockingproducts",getMockingProducts)
 router.get("/:id",getProductById)
 
 //Agrega un producto
-router.post("/",passportCall("current",{},"admin"),createProduct)
+// router.post("/",passportCall("current",{},"admin"),createProduct)
+router.post("/",createProduct)
+
 
 
 
@@ -28,6 +30,7 @@ router.put("/:id",passportCall("current",{},"admin"),validationId,valitionExiste
 
 //Elimina producto por id.
 router.delete("/:id",passportCall("current",{},"admin"),validationId,valitionExistenceProduct,deleteProduct)
+
 
 
 export default router

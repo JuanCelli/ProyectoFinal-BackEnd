@@ -1,21 +1,33 @@
 import mongoose from "mongoose";
+import CustomError from "../services/errors/CustomError.js";
+import errorsEnum from "../services/errors/errors.enum.js";
+
 
 export const validationId = (req, res, next) => {
     try {
         const { id,pid } = req.params
         if(id){
             if (!mongoose.Types.ObjectId.isValid(id)) {
-                throw { status: 400, msj: "Id not valid" }
+                CustomError.createError({
+                    name:"Invalid Id Error",
+                    cause:null,
+                    message:"El ID ingresado no es valido",
+                    code: errorsEnum.INVALID_TYPES_ERROR,
+                })
             }
         }
         if(pid){
             if (!mongoose.Types.ObjectId.isValid(pid)) {
-                throw { status: 400, msj: "Id not valid" }
+                CustomError.createError({
+                    name:"Invalid Id Error",
+                    cause:null,
+                    message:"El ID ingresado no es valido",
+                    code: errorsEnum.INVALID_TYPES_ERROR,
+                })
             }
         }
         next()
     } catch (error) {
-        console.log(error)
-        res.status(error.status).json({ message: error.msj})
+        next(error)
     }
 }

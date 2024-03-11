@@ -1,16 +1,25 @@
 import { validationNumPositive } from '../utils/validationNumPositive.js';
 import { productManager } from "../routes/products.router.js";
+import { productsService } from '../services/service.js';
+import CustomError from '../services/errors/CustomError.js';
+import errorsEnum from '../services/errors/errors.enum.js';
 
 export const validationExistenceProduct = (req, res, netx) => {
-    const { id } = req.params;
-    const product = productManager.getProductById(validationNumPositive(id));
-
-    if (!product) {
-        res.status(404).json({
-            error: "Not found"
-        });
+    try {
+        const { id } = req.params;
+        
+        const product = productsService.getProductById(validationNumPositive(id));
+    
+        if (!product) {
+            CustomError.createError({
+                name:"Product Get Error",
+                cause:null,
+                message:"Producto no econtrado",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
+        }
+        netx();
+    } catch (error) {
+        netx(error);
     }
-
-
-    netx();
 };

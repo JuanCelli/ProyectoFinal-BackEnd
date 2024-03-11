@@ -1,6 +1,7 @@
 import express from 'express'
 import productsRouter from './routes/products.router.js'
 import cartRouter from './routes/carts.router.js'
+import loggersRouter from './routes/loggers.router.js'
 import viewsRouter from './routes/views.router.js'
 import sessionsRouter from './routes/sessions.router.js'
 import usersViewsRouter from './routes/usersViews.router.js'
@@ -14,6 +15,9 @@ import cookieParser from 'cookie-parser'
 import initializePassport from './passport/passport.config.js'
 import passport from 'passport'
 import config from './config/config.js'
+import ErrorHandler from './services/errors/middleware/ErrorHandler.js'
+import { addLogger } from './config/customLoggers.js'
+
 
 
 
@@ -24,6 +28,7 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
+app.use(addLogger)
 app.use(session(
     {
         store: MongoStore.create({
@@ -41,15 +46,18 @@ initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
 
+
+
 app.use("/api/products",productsRouter)
 app.use("/api/carts",cartRouter)
 app.use("/api/sessions",sessionsRouter)
+app.use("/api/loggerstest",loggersRouter)
 app.use("/",viewsRouter)
 app.use("/users",usersViewsRouter)
 
 
-
 app.use(express.static(`${rootDir}/../public`))
+app.use(ErrorHandler)
 
 
 

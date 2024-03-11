@@ -1,5 +1,8 @@
 
+import CustomError from "../services/errors/CustomError.js";
+import errorsEnum from "../services/errors/errors.enum.js";
 import { cartService } from "../services/service.js";
+
 
 
 export  const  valitionExistenceCart = async (req, res, next) => {
@@ -8,12 +11,16 @@ export  const  valitionExistenceCart = async (req, res, next) => {
         const cart = await cartService.getCartById(id)
 
         if(cart.error){
-            throw {status:404, msj: "Not found"}
+            CustomError.createError({
+                name:"Cart Get Error",
+                cause:null,
+                message:"Carrito no encontrado",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
         }
 
         next()
     } catch (error) {
-        console.log(error)
-        res.status(error.status).json({ message: error.msj})
+        next(error)
     }
 }

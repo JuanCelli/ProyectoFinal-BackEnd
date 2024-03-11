@@ -1,17 +1,24 @@
+import CustomError from "../services/errors/CustomError.js"
+import errorsEnum from "../services/errors/errors.enum.js"
 import { cartService, productsService, ticketService } from "../services/service.js"
 
-export const getCartById = async (req, res) => {
+export const getCartById = async (req, res,next) => {
     try {
         const {id} = req.params
         const response = await cartService.getCartById(id)
 
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Cart Get Error",
+                cause:null,
+                message:"Carrito no econtrado",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
         }
 
         res.json(response)
     }catch (error){
-        res.status(error.status).json({message:error.msj })
+        next(error)
     }
 }
 
@@ -26,22 +33,27 @@ export const createCart = async (req, res) => {
     }
 }
 
-export const addProductById = async (req, res) => {
+export const addProductById = async (req, res, next) => {
 
     try {
         const {id,pid} = req.params
         const response = await cartService.addProductToCart(id, pid)
 
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Add Product to Cart Error",
+                cause:null,
+                message:"Error al intentar agregar producto a carrito",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
         res.json({message:"Producto agregado al carrito con éxito"})
     } catch (error) {
-        res.status(error.status).json({message:error.msj})
+        next(error)
     }
 }
 
-export const updateQuantityProductInCart = async (req, res) => {
+export const updateQuantityProductInCart = async (req, res,next) => {
     try {
         const {id,pid} = req.params
         const {newQuality} = req.body
@@ -49,16 +61,21 @@ export const updateQuantityProductInCart = async (req, res) => {
         const response = await cartService.updateQualityProductInCart(id,pid, newQuality)
 
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Cart Update Error",
+                cause:null,
+                message:"Error al intentar actualizar cantidad de productos en carrito",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
         res.json({message:"Cantidad actuliaza con éxito."})
 
     }catch(error){
-        res.status(error.status).json({message:error.msj})
+        next(error)
     }
 }
 
-export const incrementQuantityProductInCart = async (req, res) => {
+export const incrementQuantityProductInCart = async (req, res,next) => {
 
     try {
         const {id,pid} = req.params
@@ -66,74 +83,97 @@ export const incrementQuantityProductInCart = async (req, res) => {
         const response = await cartService.incrementProductInCart(id, pid)
 
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Cart Update Error",
+                cause:null,
+                message:"Error al intentar incrementar producto en carrito",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
 
         res.json({message:`Producto del carrito actualizado correctamente`})
 
     } catch (error) {
-        res.status(error.status).json({message:error.msj})
+        next(error)
     }
 }
 
-export const updateCart = async (req, res) => {
+export const updateCart = async (req, res,next) => {
 
     try {
         const {id} = req.params
         const response = await cartService.updateCart(id, req.body)
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Cart Update Error",
+                cause:null,
+                message:"Error al intentar incrementar actualizar carrito",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
         res.json({message:"Carrito actualizado con éxito"})
     } catch (error) {
-        res.status(error.status).json({message:error.msj})
+        next(error)
     }
 }
 
-export const deleteCartById = async (req, res) => {
+export const deleteCartById = async (req, res,next) => {
     try {
         const {id} = req.params
 
         const response = await cartService.deleteCart(id)
 
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Cart Delete Error",
+                cause:null,
+                message:"Error al intentar eliminar carrito",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
 
         res.json({message:"Carrito eliminado con éxito"})
     } catch (error) {
-        console.log(error)
-        res.status(error.status).json({message:error.msj})
+        next(error)
     }
 }
-export const deleteProductFromCart = async (req, res) => {
+export const deleteProductFromCart = async (req, res,next) => {
     try {
         const {id,pid} = req.params
 
         const response = await cartService.deleteProductFromCart(id, pid)
 
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Product Delete From Cart Error",
+                cause:null,
+                message:"Error al intentar eliminar producto del carrito",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
 
         res.json({message:"Producto eliminado del carrito con éxito"})
     } catch (error) {
-        console.log(error)
-        res.status(error.status).json({message:error.msj})
+        next(error)
     }
 }
-export const deleteAllProductFromCart = async (req, res) => {
+export const deleteAllProductFromCart = async (req, res,next) => {
     try {
         const {id} = req.params
         const response = await cartService.deleteAllProductFromCart(id)
 
         if(response.error){
-            throw response
+            CustomError.createError({
+                name:"Products Delete From Cart Error",
+                cause:null,
+                message:"Error al intentar eliminar productos del carrito",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
         res.json({message:"Productos eliminados del carrito con éxito"})
 
     } catch (error) {
-        res.status(error.status).json({message:error.msj})
+        next(error)
     }
 }
 
