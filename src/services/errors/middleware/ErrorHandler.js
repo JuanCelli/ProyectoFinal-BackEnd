@@ -5,14 +5,14 @@ const ErrorHandler = (error, req, res, next) => {
     switch (error.code) {
         case errorsEnum.INVALID_TYPES_ERROR:
             req.logger.error(error.message)
-            res.status(400).send({ status: "error", error: error.message });
+            res.status(400).json({ status: "error", error: error.message });
             break;
         case errorsEnum.NOT_FOUND_ERROR:
             req.logger.error(error.message)
-            res.status(404).send({ status: "error", error: error.message });
+            res.status(404).json({ status: "error", error: error.message });
             break;
         default:
-            res.status(500).send({ status: "error", error: "Unhandled error!" });
+            res.status(500).json({ status: "error", error: "Unhandled error!" });
     }
 };
 

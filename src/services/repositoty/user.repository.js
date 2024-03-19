@@ -12,13 +12,9 @@ export default class UserRepository {
 
     createUser = (data) => {
         return this.dao.createUser(data);
-    }
 
-    updateProduct = (id, newProduct) => {
-        return this.dao.updateProduct(id, newProduct);
     }
-
-    deleteProduct = (id) => {
-        return this.dao.deleteProduct(id);
+    changeUserPassword = (id,newPassword) => {
+        return this.dao.changeUserPassword(id,newPassword);
     }
 }

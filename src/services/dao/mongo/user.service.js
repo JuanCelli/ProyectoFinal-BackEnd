@@ -32,7 +32,18 @@ class UserManagerMongo{
             return error
         }
     }
+    
+    async changeUserPassword(id,newPassword){
+        try {
+            const response = await userModel.updateOne({_id: id}, {password:newPassword})
+            if(response.acknowledged==false || response.modifiedCount==0){
+                throw {error: true,status:400, msj: "contraseña no actualizada"}
+            }
+            return response
+        } catch (error) {
+            return error
+        }
+    }
 }
-
 
 export const userManagerMongo = new UserManagerMongo()

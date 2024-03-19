@@ -16,4 +16,6 @@ export default {
     urlMongo: process.env.MONGO_URL,
     adminName: process.env.ADMIN_NAME,
     adminPassword: process.env.ADMIN_PASSWORD,
+    emailAccount: process.env.GMAIL_ACCOUNT,
+    emailAccountPassword: process.env.GMAIL_APP_PASSWORD,
 }

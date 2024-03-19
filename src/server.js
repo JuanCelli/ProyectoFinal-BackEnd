@@ -4,6 +4,7 @@ import cartRouter from './routes/carts.router.js'
 import loggersRouter from './routes/loggers.router.js'
 import viewsRouter from './routes/views.router.js'
 import sessionsRouter from './routes/sessions.router.js'
+import userRouter from './routes/users.router.js'
 import usersViewsRouter from './routes/usersViews.router.js'
 import rootDir from './utils/dirname.js'
 import hanblebars from 'express-handlebars'
@@ -49,6 +50,7 @@ app.use(passport.session())
 
 
 app.use("/api/products",productsRouter)
+app.use("/api/users",userRouter)
 app.use("/api/carts",cartRouter)
 app.use("/api/sessions",sessionsRouter)
 app.use("/api/loggerstest",loggersRouter)

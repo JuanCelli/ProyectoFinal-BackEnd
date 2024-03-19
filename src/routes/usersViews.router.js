@@ -15,6 +15,11 @@ router.get("/login",(req,res)=>{
         title:"Login",
     })
 })
+router.get("/reset-password/:id",(req,res)=>{
+    res.render("resetPassword",{
+        title:"Reestablecer contraseña",
+    })
+})
 
 router.get("/",passportCall("current",{failureRedirect: '/users/login'}),(req,res)=>{
     res.render("profile",{
