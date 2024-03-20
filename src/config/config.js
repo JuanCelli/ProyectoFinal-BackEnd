@@ -5,6 +5,7 @@ import program from '../process.js';
 dotenv.config();
 
 export const environment = program.opts().mode;
+export const authentication = program.opts().auth;
 
 dotenv.config({
     path: environment === "prod" ? "./src/config/.env.production" : "./src/config/.env.development"

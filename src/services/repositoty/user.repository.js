@@ -17,4 +17,7 @@ export default class UserRepository {
     changeUserPassword = (id,newPassword) => {
         return this.dao.changeUserPassword(id,newPassword);
     }
+    changeUserRole = (id,newRole) => {
+        return this.dao.changeUserRole(id,newRole);
+    }
 }

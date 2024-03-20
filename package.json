@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.js --mode dev",
-    "prod": "node --watch src/server.js --mode prod",
+    "prod": "nodemon src/server.js --mode prod",
     "start": "node src/server.js"
   },
   "keywords": [],

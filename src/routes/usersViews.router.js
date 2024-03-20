@@ -15,8 +15,13 @@ router.get("/login",(req,res)=>{
         title:"Login",
     })
 })
-router.get("/reset-password/:id",(req,res)=>{
+router.get("/reset-password/:idToken",(req,res)=>{
     res.render("resetPassword",{
+        title:"Reestablecer contraseña",
+    })
+})
+router.get("/form-mail",(req,res)=>{
+    res.render("formEmailResetPassword",{
         title:"Reestablecer contraseña",
     })
 })

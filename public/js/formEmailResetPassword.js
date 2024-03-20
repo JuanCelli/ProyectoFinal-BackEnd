@@ -1,4 +1,4 @@
-const form = document.getElementById("loginForm")
+const form = document.getElementById("mailForm")
 
 form.addEventListener("submit",async event =>{
     event.preventDefault()
@@ -7,7 +7,7 @@ form.addEventListener("submit",async event =>{
     const object = {}
     data.forEach((value,key) =>object[key]=value)
 
-    const response = await fetch("/api/sessions/login",{
+    const response = await fetch(`/api/users/send-mail`,{
         method: "POST",
         body: JSON.stringify(object),
         headers:{
@@ -15,8 +15,10 @@ form.addEventListener("submit",async event =>{
         }
     })
 
+
     if(response.ok){
-        window.location.replace("/users/")
+        alert(`Se envió un email para reestablecer contraseña, por favor revice su casilla de mails.`)
+        window.location.replace("/users/login")
         return
     }
 

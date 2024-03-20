@@ -17,19 +17,19 @@ router.get("/mockingproducts",getMockingProducts)
 router.get("/:id",getProductById)
 
 //Agrega un producto
-// router.post("/",passportCall("current",{},"admin"),createProduct)
-router.post("/",createProduct)
+router.post("/",passportCall("current",{},["admin","premium"]),createProduct)
+// router.post("/",createProduct)
 
 
 
 
 
 //Actualiza producto por id y por campo de body
-router.put("/:id",passportCall("current",{},"admin"),validationId,valitionExistenceProduct,updateProduct)
+router.put("/:id",passportCall("current",{},["admin","premium"]),validationId,valitionExistenceProduct,updateProduct)
 
 
 //Elimina producto por id.
-router.delete("/:id",passportCall("current",{},"admin"),validationId,valitionExistenceProduct,deleteProduct)
+router.delete("/:id",passportCall("current",{},["admin","premium"]),validationId,valitionExistenceProduct,deleteProduct)
 
 
 

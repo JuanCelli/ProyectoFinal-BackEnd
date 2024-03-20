@@ -1,20 +1,18 @@
-import config from "../config/config.js";
 import CustomError from "../services/errors/CustomError.js";
 import errorsEnum from "../services/errors/errors.enum.js";
 import { resetTokenService, userService } from "../services/service.js";
 import createHash from "../utils/createHash.js";
 import isValidPassword from "../utils/isValidPassword.js";
-import nodemailer from 'nodemailer';
-
-
+import { sendEmail } from "../utils/sendMail.js";
 
 
 export const changePasswordUser = async (req, res,next) => {
     try {
-        const {id} = req.params
+        const {idToken} = req.params
         const {newPassword} = req.body
 
-        const token = await resetTokenService.getResetToken(id)
+        const token = await resetTokenService.getResetTokenById(idToken)
+
 
         if(!token){
             CustomError.createError({
@@ -35,7 +33,7 @@ export const changePasswordUser = async (req, res,next) => {
         }
 
 
-        const response = await userService.changeUserPassword(id, createHash(newPassword))
+        const response = await userService.changeUserPassword(token.user._id, createHash(newPassword))
 
         if(response.error){
             CustomError.createError({
@@ -52,18 +50,23 @@ export const changePasswordUser = async (req, res,next) => {
 
 export const sendEmailWithLinkToResetPassword = async (req,res,next) => {
     try {
-        sendEmail()
-        res.json({message: "Email de para reestablecer contraseña enviado."})
-    } catch (error) {
-        next(error)
-    }
-}
+        const {email} = req.body
 
-export const generateTokenToResetPassword = async (req,res,next) => {
-    try {
-        const {id} = req.params
-        const token = await resetTokenService.createResetToken(id)
+        const user = await userService.getUserByEmail(email)
+        
+        if(user.error){
+            CustomError.createError({
+                name:"Get User Error",
+                message:"Usuario no econtrado.",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
+        }
+        const {_id} = user
+        const id = _id.toString()
 
+        
+        const token = await generateTokenToResetPassword(id)
+        
         if(!token||token.errors){
             CustomError.createError({
                 name:"Create Token Error",
@@ -71,54 +74,65 @@ export const generateTokenToResetPassword = async (req,res,next) => {
                 code: errorsEnum.INVALID_TYPES_ERROR,
             })
         }
-        res.json({msj:"Token para reestablecer la contraseña generado con éxito."})
+        sendEmail(token._id,email)
+        res.json({message: "Email para reestablecer contraseña enviado."})
     } catch (error) {
         next(error)
     }
 }
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    port: 587,
-    auth: {
-        user: config.emailAccount,
-        pass: config.emailAccountPassword
-    }
-})
-
-transporter.verify(function (error, success) {
-    if (error) {
-        console.log(error);
-    } else {
-        console.log('Server is ready to take our messages');
-    }
-})
-
-const mailOptions = (email,id) => {
-    return {
-        from: config.emailAccount,
-        to: email,
-        subject: "Reestablecimiento de contraseña",
-        html: `<div>
-                    <h1> Esto es un test de correo con NodeMailer </h1>
-                    <a href="http://localhost:8080/users/reset-password/${id}">Click aquí para reestablecer contraseña</a>
-                </div>`,
-        attachments: []
+export const generateTokenToResetPassword = async (id) => {
+    try {
+        const token = await resetTokenService.createResetToken(id)
+        return token
+    } catch (error) {
+        console.log(error)
     }
 }
 
-export const sendEmail = (req, res) => {
+
+export const switchRoleUser = async (req,res,next) =>{
     try {
-        let result = transporter.sendMail(mailOptions("juanicelli@gmail.com","65b82a0766514c25d7640d65"), (error, info) => {
-            if (error) {
-                console.log(error);
-                res.status(400).send({ message: "Error", payload: error });
-            }
-            console.log('Message sent: %s', info.messageId);
-            res.send({ message: "Success", payload: info })
-        })
+        const {id} = req.params
+
+        const user = await userService.getUserById(id)
+
+        if(user.error){
+            CustomError.createError({
+                name:"Get User Error",
+                message:"Usuario no encontrado",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
+        }
+
+        if(user.role==="admin"){
+            CustomError.createError({
+                name:"Switch Role User Error",
+                message:"El usuario es administrado, no puede cambiar de su rol.",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
+        }
+        
+        let newRole
+        if(user.role==="user"){
+            newRole = "premium"
+        }
+        else{
+            newRole = "user"
+        }
+
+        const response = await userService.changeUserRole(id,newRole)
+
+        if(response.error){
+            CustomError.createError({
+                name:"Update User Role Error",
+                message:response.msj,
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
+        }
+
+        res.json({message: "Cambio de rol realizado con éxito."})
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: error, message: "No se pudo enviar el email desde:" + config.emailAccount });
+        next(error)
     }
 }

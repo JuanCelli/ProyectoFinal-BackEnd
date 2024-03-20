@@ -92,3 +92,27 @@
 {"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
 {"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
 {"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
+{"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
+{"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
+{"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
+{"level":"error","message":"La contraseña que está intentado colocar es igual a la anterior, pruebe con otra contraseña."}
+{"level":"error","message":"La contraseña que está intentado colocar es igual a la anterior, pruebe con otra contraseña."}
+{"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
+{"level":"error","message":"Error al intentar crear token para reestablecimiento de contraseña."}
+{"level":"error","message":"Error al intentar crear token para reestablecimiento de contraseña."}
+{"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
+{"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
+{"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
+{"level":"error","message":"El link para reestablecimiento de contraseña no fue encontrado o ha expirado."}
+{"level":"error","message":"Usuario no econtrado."}
+{"level":"error","message":"La contraseña que está intentado colocar es igual a la anterior, pruebe con otra contraseña."}
+{"level":"error","message":"Usuario no econtrado."}
+{"level":"error","message":"El usuario es administrado, no puede cambiar de su rol."}
+{"level":"error","message":"Producto no econtrado"}
+{"level":"error","message":"El usuario no tiene permisos para modificar este producto."}
+{"level":"error","message":"Error al intentar actualizar producto"}
+{"level":"error","message":"El usuario no tiene permisos para modificar este producto."}
+{"level":"error","message":"El usuario no tiene permisos para modificar este producto."}
+{"level":"error","message":"El usuario no tiene permisos para modificar este producto."}
+{"level":"error","message":"El usuario no tiene permisos para modificar este producto."}
+{"level":"error","message":"El usuario no tiene permisos para modificar este producto."}

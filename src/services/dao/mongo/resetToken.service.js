@@ -2,11 +2,10 @@ import ResetToken from "./models/resetToken.model.js";
 
 
 class ResetTokenManagerMongo{
-    getResetToken = async (idUser) =>{
+    getResetTokenById = async (idToken) =>{
         try {
-            const response = await ResetToken.findOne({user: idUser})
-                .populate('user',"email")
-                .populate('user',"password")
+            const response = await ResetToken.findOne({_id: idToken})
+                .populate('user',"email password")
             return response
         } catch (error) {
             return error

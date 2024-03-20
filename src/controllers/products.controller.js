@@ -56,8 +56,22 @@ export const createProduct = async (req, res,next) => {
 export const updateProduct = async (req, res,next) => {
     try{
         const {id} = req.params
-
+        
+        const product = await productsService.getProductById(id)
+        
         const newProduct = req.body
+        
+        if(req.user.role!=="admin"){
+            if(req.user.email!==product.owner){
+                CustomError.createError({
+                    name:"Authorized Error",
+                    cause:null,
+                    message:"El usuario no tiene permisos para modificar este producto.",
+                    code: errorsEnum.NOT_AUTHORIZED_ERROR,
+                })
+            }
+        }
+
         const response = await productsService.updateProduct(id, newProduct)
 
         if(response.error){
@@ -78,10 +92,21 @@ export const updateProduct = async (req, res,next) => {
 export const deleteProduct = async (req, res,next) => {
     try{
         const {id} = req.params
+        const product = await productsService.getProductById(id)
+
+        if(req.user.role!=="admin"){
+            if(req.user.role!==product.owner){
+                CustomError.createError({
+                    name:"Authorized Error",
+                    cause:null,
+                    message:"El usuario no tiene permisos para eliminar este producto.",
+                    code: errorsEnum.NOT_AUTHORIZED_ERROR,
+                })
+            }
+        }
 
         const response = await productsService.deleteProduct({_id: id}, {status:false})
 
-        req.logger.debug("Gola")
         if(response.error){
             CustomError.createError({
                 name:"Product Delete Error",

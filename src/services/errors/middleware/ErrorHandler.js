@@ -11,6 +11,10 @@ const ErrorHandler = (error, req, res, next) => {
             req.logger.error(error.message)
             res.status(404).json({ status: "error", error: error.message });
             break;
+        case errorsEnum.NOT_AUTHORIZED_ERROR:
+            req.logger.error(error.message)
+            res.status(403).json({ status: "error", error: error.message });
+            break;
         default:
             res.status(500).json({ status: "error", error: "Unhandled error!" });
     }

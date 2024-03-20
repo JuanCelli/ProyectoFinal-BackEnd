@@ -2,9 +2,9 @@ import passport from "passport";
 
 import {environment} from '../config/config.js'
 
-export const passportCall = (strategy, options = {}, allowedRole) => {
+export const passportCall = (strategy, options = {}, allowedRoles) => {
     return async (req, res, next) => {
-        if(environment!=="dev"){
+        // if(environment!=="dev"){
             passport.authenticate(strategy, function (err, user, info) {
                 if (err) return next(err);
                 if (!user) {
@@ -15,8 +15,8 @@ export const passportCall = (strategy, options = {}, allowedRole) => {
                 }
                 req.user = user
     
-                if(allowedRole && strategy==="current"){
-                    if(allowedRole!==user.role){
+                if(allowedRoles && strategy==="current"){
+                    if(!allowedRoles.includes(user.role)){
                         return res.status(403).send({error: "Forbidden (403)"})
                     }
                 }
@@ -24,6 +24,6 @@ export const passportCall = (strategy, options = {}, allowedRole) => {
                 next();
             })(req, res, next)
         }
-        next()
-    }
+    //     next()
+    // }
 }
