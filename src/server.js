@@ -18,6 +18,8 @@ import passport from 'passport'
 import config from './config/config.js'
 import ErrorHandler from './services/errors/middleware/ErrorHandler.js'
 import { addLogger } from './config/customLoggers.js'
+import swaggerUIExpress from 'swagger-ui-express'
+import swaggerSpecs from './swaggerSpecs.js'
 
 
 
@@ -48,7 +50,6 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 
-
 app.use("/api/products",productsRouter)
 app.use("/api/users",userRouter)
 app.use("/api/carts",cartRouter)
@@ -56,6 +57,7 @@ app.use("/api/sessions",sessionsRouter)
 app.use("/api/loggerstest",loggersRouter)
 app.use("/",viewsRouter)
 app.use("/users",usersViewsRouter)
+app.use('/api/docs', swaggerUIExpress.serve, swaggerUIExpress.setup(swaggerSpecs))
 
 
 app.use(express.static(`${rootDir}/../public`))

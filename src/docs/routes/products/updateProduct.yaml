@@ -1,0 +1,30 @@
+paths:
+  /api/products/{id}:
+    put:
+      summary: Actualizar producto.
+      tags:
+        - Products
+      parameters:
+      - name: id
+        in: path
+        description: ID del producto que desea actualizar.
+        required: true
+        type: string
+      requestBody:
+        description: Es posible actualizar solo los campos que deseamos modificar, colocandolos en req.body con su nuevo valor.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schema/Product'
+      responses:
+        "200":
+          description: Producto actualizado.
+        "401":
+          description: El usuario no está autenticado.
+        "403":
+          description: El usuario no está autorizado para actualizar producto.
+        "400":
+          description: Una o más propiedades para actualizar producto no fueron ingresados correctamente.
+        "500":
+          description: Error inesperado interno del servidor.

@@ -22,7 +22,7 @@ export const getProductById = async (req, res,next) => {
         const {id} = req.params
         const product = await productsService.getProductById(id)
 
-        if(!product){
+        if(!product._id){
             CustomError.createError({
                 name:"Product Get Error",
                 cause:null,
@@ -48,7 +48,7 @@ export const createProduct = async (req, res,next) => {
                 code: errorsEnum.INVALID_TYPES_ERROR,
             })
         }
-        res.json(product)
+        res.status(201).json(product)
     } catch (error) {
         next(error)
     }
@@ -94,6 +94,15 @@ export const deleteProduct = async (req, res,next) => {
         const {id} = req.params
         const product = await productsService.getProductById(id)
 
+        if(!product._id){
+            CustomError.createError({
+                name:"Product Delete Error",
+                cause:null,
+                message:"Producto no econtrado",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
+        }
+
         if(req.user.role!=="admin"){
             if(req.user.role!==product.owner){
                 CustomError.createError({
@@ -111,8 +120,7 @@ export const deleteProduct = async (req, res,next) => {
             CustomError.createError({
                 name:"Product Delete Error",
                 cause:null,
-                message:"Error al intentar eliminar producto",
-                code: errorsEnum.INVALID_TYPES_ERROR,
+                message:"Error al intentar eliminar producto, producto no econtrado",
             })
         }
 

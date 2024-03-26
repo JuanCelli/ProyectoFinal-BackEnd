@@ -1,0 +1,17 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos de la base de datos.
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Array con todos los productos disponibles.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schema/Product'
+        "500":
+          description: Error inesperado interno del servidor.

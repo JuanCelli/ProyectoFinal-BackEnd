@@ -1,0 +1,39 @@
+components:
+  schema:
+    Cart:
+      type: object
+      required:
+        - productsCart
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de Mongo.
+        productsCart:
+          type: array
+          description: Array de productos que contiene el carrito.
+          items:
+            $ref: '#/components/schema/CartItem'
+        status:
+          type: boolean
+          description: Estado del producto, describe si fue eliminado y si sigue activo para busqueda en base de datos.
+          default: true
+        required:
+          - productsCart
+      example:
+        _id: ObjectId("65813db4461fc9a5cdee3624")
+        productsCart: [{
+          product: '#/components/schema/Product',
+          quality: 2
+        }]
+
+    CartItem:
+      type: objetc
+      properties:
+        product:
+          $ref: '#/components/schema/Product'
+        quantity:
+          type: number
+          description: Cantidad especifica de ese producto ingresadas en el carrito.
+      required:
+        - product
+        - quantity

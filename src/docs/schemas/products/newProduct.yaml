@@ -1,0 +1,52 @@
+# Product
+components:
+  requestBodies:
+    NewProduct:
+      type: object
+      required:
+        - title
+        - description
+        - code
+        - price
+        - stock
+        - category
+      properties:
+        title:
+          type: string
+          description: Título del producto.
+        description:
+          type: string
+          description: Descripción del produto.
+        code:
+          type: string
+          description: Código del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        status:
+          type: boolean
+          description: Estado del producto, describe si fue eliminado y si sigue activo para busqueda en base de datos.
+          default: true
+        stock:
+          type: number
+          description: Cantidad de productos disponibles en stock.
+        category:
+          type: string
+          description: Categoría del producto.
+        thumbnails:
+          type: string
+          description: URL de la imagen del producto.
+        owner:
+          type: string
+          description: Hace referencia al mail del usuario que creó ese producto, si no tiene propietario especifico por default es admin.
+          default: admin
+      example:
+        title: Tablet
+        description: Este es un producto prueba
+        code: 155149
+        price: 200
+        status: true
+        stock: 25
+        category: Tecnología
+        thumbnails: ""
+        owner: lucarbo@gmail.com

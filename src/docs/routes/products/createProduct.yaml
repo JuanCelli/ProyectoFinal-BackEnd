@@ -1,0 +1,29 @@
+paths:
+  /api/products/:
+    post:
+      summary: Crear producto.
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/NewProduct'
+      responses:
+        "201":
+          description: Producto creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schema/Product'
+        "401":
+          description: El usuario no está autenticado.
+        "403":
+          description: El usuario no está autorizado para crear producto.
+        "400":
+          description: Una o más propiedades para crear producto no fueron ingresados correctamente.
+        "500":
+          description: Error inesperado interno del servidor.
