@@ -43,8 +43,8 @@ export const addProductById = async (req, res, next) => {
             CustomError.createError({
                 name:"Add Product to Cart Error",
                 cause:null,
-                message:"Error al intentar agregar producto a carrito",
-                code: errorsEnum.INVALID_TYPES_ERROR,
+                message:"El producto que intenta agregar no fue econtrado",
+                code: errorsEnum.notStockProducts,
             })
         }
         res.json({message:"Producto agregado al carrito con éxito"})
@@ -148,7 +148,7 @@ export const deleteProductFromCart = async (req, res,next) => {
                 name:"Product Delete From Cart Error",
                 cause:null,
                 message:"Error al intentar eliminar producto del carrito",
-                code: errorsEnum.INVALID_TYPES_ERROR,
+                code: errorsEnum.NOT_FOUND_ERROR,
             })
         }
 
@@ -235,7 +235,7 @@ export const purchaseCart = async (req, res) => {
             throw ticketResponse
         }
 
-        res.json({message:"Compra realizada con éxito", amount: amount, notStockProducts: notStockProducts,ticket: ticketResponse})
+        res.json({amount: amount, notStockProducts: notStockProducts,ticket: ticketResponse})
 
     } catch (error) {
         console.log(error)

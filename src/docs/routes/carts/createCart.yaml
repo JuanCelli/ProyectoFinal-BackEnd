@@ -1,17 +1,11 @@
 paths:
-  /api/carts/{id}:
+  /api/carts:
     post:
       summary: Crear carrito.
       tags:
-        - Cart
+        - Carts
       responses:
-        "201":
-          description: Carrito creado.
-          content:
-            application/json:
-              schema:
-                type: object
-                items:
-                  $ref: '#/components/schema/Cart'
+        "200":
+          description: Producto Agregado.
         "500":
           description: Error inesperado interno del servidor.

@@ -1,0 +1,20 @@
+paths:
+  /api/carts/{id}/deleteProducts:
+    delete:
+      summary: Elimina todos los productos del carrito.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del carrito del cual se eliminan sus productos.
+          schema:
+            $type: String
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Productos eliminados.
+        "404":
+          description: El carrito no fue encontrado.
+        "500":
+          description: Error inesperado interno del servidor.

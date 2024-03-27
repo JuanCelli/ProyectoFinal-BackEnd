@@ -1,0 +1,28 @@
+paths:
+  /api/carts/{id}:
+    put:
+      summary: Agrega todos los productos ingresados a un carrito.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del carrito que desea actualizar.
+          schema:
+            $type: String
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/CartUpdate'
+      responses:
+        "200":
+          description: Carrito actualizado correctamente.
+        "400":
+          description: Los datos a actualizar son invalidos.
+        "404":
+          description: El carrito no fue encontrado.
+        "500":
+          description: Error inesperado interno del servidor.

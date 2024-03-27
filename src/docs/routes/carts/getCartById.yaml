@@ -3,7 +3,7 @@ paths:
     get:
       summary: Obtiene un carrito buscado por su ID.
       tags:
-        - Cart
+        - Carts
       parameters:
         - name: id
           in: path
@@ -17,9 +17,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schema/Cart'
+                $ref: '#/components/schema/Cart'
         "400":
           description: ID inválido.
         "404":

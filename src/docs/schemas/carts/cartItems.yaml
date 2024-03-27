@@ -1,0 +1,25 @@
+components:
+  schema:
+    CartItem:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schema/Product'
+        quantity:
+          type: number
+          description: Cantidad especifica de ese producto ingresadas en el carrito.
+        required:
+          - product
+          - quantity
+      example:
+        product:
+          _id: "65813db4461fc9a5cdee3629"
+          title: "Auriculares Bluetooth"
+          description: "Auriculares inalámbricos de alta calidad"
+          code: "15467"
+          price: 200
+          status: true
+          stock: 43
+          category: "Tecnología"
+          owner: "lucarbo@gmail.com"
+        quantity: 2

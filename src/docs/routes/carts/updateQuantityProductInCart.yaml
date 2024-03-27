@@ -1,0 +1,28 @@
+paths:
+  /api/carts/{id}/product/{pid}:
+    put:
+      summary: Actualiza la cantidad de un producto en un carrito por su id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del carrito al que se le agregará el producto.
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se desea agregar.
+          schema:
+            $type: String
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Cantidad actualizada correctamente.
+        "400":
+          description: El producto que intenta ingresar no está en el carrito o el valor ingresado es invalido
+        "404":
+          description: El carrito no fue encontrado.
+        "500":
+          description: Error inesperado interno del servidor.

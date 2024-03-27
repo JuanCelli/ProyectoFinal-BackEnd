@@ -13,7 +13,7 @@ paths:
             $type: String
       responses:
         "200":
-          description: Producto econtrado por ID.
+          description: Producto encontrado por ID.
           content:
             application/json:
               schema:
