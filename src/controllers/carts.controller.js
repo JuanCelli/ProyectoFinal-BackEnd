@@ -26,7 +26,7 @@ export const getCartById = async (req, res,next) => {
 export const createCart = async (req, res) => {
     try{
         const cart = await cartService.createCart()
-        res.json(cart)
+        res.res(201).json(cart)
 
     }catch (error){
         res.json(error)

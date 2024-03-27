@@ -21,13 +21,11 @@ components:
           - productsCart
       example:
         _id: ObjectId("65813db4461fc9a5cdee3624")
-        productsCart: [{
-          product: '#/components/schema/Product',
-          quality: 2
-        }]
+        productsCart:
+          $ref: '#/components/schema/CartItem'
 
     CartItem:
-      type: objetc
+      type: object
       properties:
         product:
           $ref: '#/components/schema/Product'
@@ -37,3 +35,8 @@ components:
       required:
         - product
         - quantity
+      example:
+        product:
+          $ref: '#/components/schema/Product'
+        quality: 3
+        

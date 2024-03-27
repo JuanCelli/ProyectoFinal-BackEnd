@@ -17,9 +17,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schema/Product'
+                $ref: '#/components/schema/Product'
         "404":
           description: Producto no econtrado.
         "500":

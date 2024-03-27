@@ -1,0 +1,28 @@
+paths:
+  /api/carts/{id}:
+    get:
+      summary: Obtiene un carrito buscado por su ID.
+      tags:
+        - Cart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del carrito que se desea obtener.
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Carrito econtrado por ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schema/Cart'
+        "400":
+          description: ID inválido.
+        "404":
+          description: Carrito no econtrado.
+        "500":
+          description: Error inesperado interno del servidor.
