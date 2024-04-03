@@ -4,7 +4,7 @@ import {environment} from '../config/config.js'
 
 export const passportCall = (strategy, options = {}, allowedRoles) => {
     return async (req, res, next) => {
-        // if(environment!=="dev"){
+        if(environment!=="test"){
             passport.authenticate(strategy, function (err, user, info) {
                 if (err) return next(err);
                 if (!user) {
@@ -24,6 +24,9 @@ export const passportCall = (strategy, options = {}, allowedRoles) => {
                 next();
             })(req, res, next)
         }
-    //     next()
-    // }
+        passport.authenticate(strategy, function (err, user, info) {
+            req.user= user
+            next();
+        })(req, res, next)
+    }
 }

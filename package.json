@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nodemon src/server.js --mode test",
     "dev": "nodemon src/server.js --mode dev",
     "prod": "nodemon src/server.js --mode prod",
     "start": "node src/server.js"
@@ -35,6 +35,9 @@
     "winston": "^3.12.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.4.1"
+    "@faker-js/faker": "^8.4.1",
+    "chai": "^5.1.0",
+    "mocha": "^10.4.0",
+    "supertest": "^6.3.4"
   }
 }

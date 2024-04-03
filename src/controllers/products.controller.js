@@ -22,7 +22,7 @@ export const getProductById = async (req, res,next) => {
         const {id} = req.params
         const product = await productsService.getProductById(id)
 
-        if(!product._id){
+        if(!product?._id){
             CustomError.createError({
                 name:"Product Get Error",
                 cause:null,
@@ -103,7 +103,7 @@ export const deleteProduct = async (req, res,next) => {
             })
         }
 
-        if(req.user.role!=="admin"){
+        if(req.user?.role!=="admin"){
             if(req.user.role!==product.owner){
                 CustomError.createError({
                     name:"Authorized Error",
@@ -114,7 +114,7 @@ export const deleteProduct = async (req, res,next) => {
             }
         }
 
-        const response = await productsService.deleteProduct({_id: id}, {status:false})
+        const response = await productsService.deleteProduct(id)
 
         if(response.error){
             CustomError.createError({
@@ -124,7 +124,7 @@ export const deleteProduct = async (req, res,next) => {
             })
         }
 
-        res.json({message: `Producto eliminado con éxito (ID: ${id})`})
+        res.status(200).json({message: `Producto eliminado con éxito (ID: ${id})`})
     }catch (error) {
         next(error)
     }

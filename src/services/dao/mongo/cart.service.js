@@ -18,9 +18,10 @@ class CartManagerMongo{
         }
     }
 
-    createCart(){
+    async createCart(){
         try {
-            return newCart = cartModel.create({productsCart:[]})
+            const newCart = await cartModel.create({productsCart:[]})
+            return newCart
         } catch (error) {
             return error
         }
@@ -28,8 +29,8 @@ class CartManagerMongo{
 
     async addProductToCart(id, pid){
         try {
-
             const product = await productsService.getProductById(pid)
+
             if(!product){
                 throw {error: true,status:404, msj: "Producto no encontrado"}
             }

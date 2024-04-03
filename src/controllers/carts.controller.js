@@ -26,7 +26,14 @@ export const getCartById = async (req, res,next) => {
 export const createCart = async (req, res) => {
     try{
         const cart = await cartService.createCart()
-        res.res(201).json(cart)
+        if(!cart?._id){
+            CustomError.createError({
+                name:"Cart Create Error",
+                cause:null,
+                message:"Error al intentar crear carrito",
+            })
+        }
+        return res.status(201).json(cart)
 
     }catch (error){
         res.json(error)
@@ -44,10 +51,10 @@ export const addProductById = async (req, res, next) => {
                 name:"Add Product to Cart Error",
                 cause:null,
                 message:"El producto que intenta agregar no fue econtrado",
-                code: errorsEnum.notStockProducts,
+                code: errorsEnum.NOT_FOUND_ERROR,
             })
         }
-        res.json({message:"Producto agregado al carrito con éxito"})
+        res.status(200).json({message:"Producto agregado al carrito con éxito"})
     } catch (error) {
         next(error)
     }
@@ -196,7 +203,6 @@ export const purchaseCart = async (req, res) => {
         let notStockProducts = []
 
         products.map((product)=>{
-            console.log(product)
             if(product.quality>=product.product.stock){
                 notStockProducts.push(product)
                 return
@@ -238,7 +244,6 @@ export const purchaseCart = async (req, res) => {
         res.json({amount: amount, notStockProducts: notStockProducts,ticket: ticketResponse})
 
     } catch (error) {
-        console.log(error)
         res.json({message:error.msj})
     }
 }

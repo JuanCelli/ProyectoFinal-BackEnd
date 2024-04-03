@@ -27,7 +27,8 @@ class ProductManagerMongo{
 
     async getProductById(id){
         try {
-            return await productModel.findOne({$and:[{_id: id},{status:true}]})
+            const product = await productModel.findOne({$and:[{_id: id},{status:true}]})
+            return product
         } catch (error) {
             return error
         }

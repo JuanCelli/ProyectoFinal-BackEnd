@@ -7,12 +7,27 @@ dotenv.config();
 export const environment = program.opts().mode;
 export const authentication = program.opts().auth;
 
+const switchEnviroment = (environment) =>{
+    let env
+
+    if(environment === "prod"){
+        env = "./src/config/.env.production"
+    }else if(environment ==="test"){
+        env = "./src/config/.env.test"
+    }else{
+        env = "./src/config/.env.development"
+    }
+
+    return env
+}
+
 dotenv.config({
-    path: environment === "prod" ? "./src/config/.env.production" : "./src/config/.env.development"
+    path: switchEnviroment(environment)
 });
 
 
 export default {
+    environment:environment,
     port: process.env.PORT,
     urlMongo: process.env.MONGO_URL,
     adminName: process.env.ADMIN_NAME,
