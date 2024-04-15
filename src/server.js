@@ -6,6 +6,7 @@ import viewsRouter from './routes/views.router.js'
 import sessionsRouter from './routes/sessions.router.js'
 import userRouter from './routes/users.router.js'
 import usersViewsRouter from './routes/usersViews.router.js'
+import filesRouter from './routes/files.router.js'
 import rootDir from './utils/dirname.js'
 import hanblebars from 'express-handlebars'
 import { Server } from 'socket.io'
@@ -20,6 +21,8 @@ import ErrorHandler from './services/errors/middleware/ErrorHandler.js'
 import { addLogger } from './config/customLoggers.js'
 import swaggerUIExpress from 'swagger-ui-express'
 import swaggerSpecs from './swaggerSpecs.js'
+
+
 
 
 
@@ -50,6 +53,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 
+app.use("/api/documents",filesRouter)
 app.use("/api/products",productsRouter)
 app.use("/api/users",userRouter)
 app.use("/api/carts",cartRouter)

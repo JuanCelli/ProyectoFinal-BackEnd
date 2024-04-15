@@ -20,4 +20,7 @@ export default class UserRepository {
     changeUserRole = (id,newRole) => {
         return this.dao.changeUserRole(id,newRole);
     }
+    UpdateLastConnection = (id) => {
+        return this.dao.UpdateLastConnection(id);
+    }
 }

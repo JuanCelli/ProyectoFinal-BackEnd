@@ -55,6 +55,20 @@ class UserManagerMongo{
             return error
         }
     }
+    async UpdateLastConnection(id){
+        try {
+            const response = await userModel.updateOne({_id: id}, {last_connection:new Date()})
+            if(response.acknowledged==false || response.modifiedCount==0){
+                throw {error: true,status:400, msj: "Error al actualizar ultima fecha de conexión"}
+            }
+            return response
+        } catch (error) {
+            return error
+        }
+    }
+
+
+
 }
 
 export const userManagerMongo = new UserManagerMongo()

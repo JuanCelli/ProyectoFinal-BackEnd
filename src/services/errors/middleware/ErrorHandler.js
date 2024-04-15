@@ -16,6 +16,7 @@ const ErrorHandler = (error, req, res, next) => {
             res.status(403).json({ status: "error", error: error.message });
             break;
         default:
+            console.log(error)
             res.status(500).json({ status: "error", error: "Unhandled error!" });
     }
 };

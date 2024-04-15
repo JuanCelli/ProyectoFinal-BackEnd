@@ -13,14 +13,14 @@ router.post("/register",passport.authenticate("register",{failureRedirect:"/api/
 // Login
 router.post("/login",passport.authenticate("login",{failureRedirect:"/api/sessions/fail-login"}),getRoleUser,login)
 
-router.post("/logout",(req,res)=>{
-    try {
-        res.clearCookie('jwtCookieToken');
-        res.json({ msj: "Has cerrado sesión correctamente." });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-})
+// router.post("/logout",(req,res)=>{
+//     try {
+//         res.clearCookie('jwtCookieToken');
+//         res.json({ msj: "Has cerrado sesión correctamente." });
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// })
 // router.post("/login",passport.authenticate("login",{failureRedirect:"/api/sessions/fail-login"}),getRoleUser,login)
 
 //Logout
