@@ -1,5 +1,4 @@
 import multer from "multer";
-import rootDir from "./dirname.js";
 
 
 const storage = multer.diskStorage({

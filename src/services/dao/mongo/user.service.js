@@ -66,6 +66,17 @@ class UserManagerMongo{
             return error
         }
     }
+    async UploadFile(id,fileReference, fileName){
+        try {
+            const response = await userModel.updateOne({_id: id}, {$push: {documents:{name:fileName,reference:fileReference}}})
+            if(response.acknowledged==false || response.modifiedCount==0){
+                throw {error: true,status:400, msj: "Error al intentar agregar documento."}
+            }
+            return response
+        } catch (error) {
+            return error
+        }
+    }
 
 
 

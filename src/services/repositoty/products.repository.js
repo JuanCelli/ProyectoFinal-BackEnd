@@ -17,6 +17,9 @@ export default class ProductsRepository {
     updateProduct = (id, newProduct) => {
         return this.dao.updateProduct(id, newProduct);
     }
+    updateThumbnails = (id, fileReference) => {
+        return this.dao.updateThumbnails(id, fileReference);
+    }
 
     deleteProduct = (id) => {
         return this.dao.deleteProduct(id);

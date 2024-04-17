@@ -55,6 +55,18 @@ class ProductManagerMongo{
         }
     }
 
+    async updateThumbnails(id,fileReference){
+        try {
+            const response = await productModel.updateOne({_id: id}, {thumbnails:fileReference})
+            if(response.acknowledged==false || response.modifiedCount==0){
+                throw {error: true,status:400, msj: "Producto no actualizado"}
+            }
+            return response
+        } catch (error) {
+            return error
+        }
+    }
+
     async deleteProduct(id){
         try {
             const response = await productModel.updateOne({_id: id}, {status:false})
