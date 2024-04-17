@@ -23,7 +23,7 @@ export default class UserRepository {
     UpdateLastConnection = (id) => {
         return this.dao.UpdateLastConnection(id);
     }
-    UploadFile = (id,fileReference, fileName) => {
-        return this.dao.UploadFile(id,fileReference,fileName);
+    UploadFile = (id,fileReference, fileName,type) => {
+        return this.dao.UploadFile(id,fileReference,fileName,type);
     }
 }

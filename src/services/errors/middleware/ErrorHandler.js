@@ -15,6 +15,10 @@ const ErrorHandler = (error, req, res, next) => {
             req.logger.error(error.message)
             res.status(403).json({ status: "error", error: error.message });
             break;
+        case errorsEnum.PRE_CONDITION_ERROR:
+            req.logger.error(error.message)
+            res.status(412).json({ status: "error", error: error.message });
+            break;
         default:
             console.log(error)
             res.status(500).json({ status: "error", error: "Unhandled error!" });

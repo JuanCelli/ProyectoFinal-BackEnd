@@ -2,25 +2,19 @@
 
 import { Router } from "express";
 import upload from "../utils/multer.js";
-import { productsService, userService } from "../services/service.js";
+import { validationId } from "../middleware/validationId.js";
+import { uploadDoc, uploadImgProduct, uploadImgProfile } from "../controllers/files.controlles.js";
+import { validationIdUser } from "../middleware/validationIdUser.js";
+import { validationTypeDoc } from "../middleware/validationTypeDoc.js";
+import { valitionExistenceProduct } from "../middleware/validationExistenceP.js";
 
 
 const router = Router()
 
+router.post("/imgprofile/:id",validationId,validationIdUser,upload.single("imgProfile"),uploadImgProfile)
 
-router.post("/imgprofile/:id",upload.single("imgProfile"),async (req, res, next)=> {
-    const {id} = req.params
-    const {originalname,path} = req.file
-    const reponse = await userService.UploadFile(id,path,originalname)
+router.post("/imgproduct/:id",validationId,valitionExistenceProduct,upload.single("imgProduct"),uploadImgProduct)
 
-    res.json(req.file)
-})
-router.post("/imgproduct/:idProduct",upload.single("imgProduct"),async (req, res, next) => {
-    const {idProduct} = req.params
-    const {path} = req.file
-    const reponse = await productsService.updateThumbnails(idProduct,path)
-
-    res.json(req.file)
-})
+router.post("/:typeDoc/:id",validationId,validationIdUser,validationTypeDoc,upload.single("document"),uploadDoc)
 
 export default router

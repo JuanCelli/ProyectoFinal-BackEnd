@@ -4,7 +4,8 @@ import { Schema, model } from "mongoose";
 const userDocument = new Schema({
     status: {type: Boolean, default:true},
     name:{type:String,required:true},
-    reference:{type:String,required:true}
+    reference:{type:String,required:true, unique:true},
+    type:{type:String,required:true}
 })
 
 const userSchema = new Schema({

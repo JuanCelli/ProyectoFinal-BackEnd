@@ -66,9 +66,9 @@ class UserManagerMongo{
             return error
         }
     }
-    async UploadFile(id,fileReference, fileName){
+    async UploadFile(id,fileReference, fileName,type){
         try {
-            const response = await userModel.updateOne({_id: id}, {$push: {documents:{name:fileName,reference:fileReference}}})
+            const response = await userModel.updateOne({_id: id}, {$push: {documents:{name:fileName,reference:fileReference,type:type}}})
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Error al intentar agregar documento."}
             }

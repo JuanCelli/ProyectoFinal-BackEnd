@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
         } else if (file.fieldname === 'imgProduct') {
             uploadDir += 'imgProduct/';
         } else {
-            uploadDir += 'other/';
+            uploadDir += 'others/';
         }
         cb(null, uploadDir);
     },

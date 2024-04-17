@@ -105,6 +105,7 @@ export const switchRoleUser = async (req,res,next) =>{
             })
         }
 
+        
         if(user.role==="admin"){
             CustomError.createError({
                 name:"Switch Role User Error",
@@ -115,6 +116,15 @@ export const switchRoleUser = async (req,res,next) =>{
         
         let newRole
         if(user.role==="user"){
+            const typesDocs = ["identification", "proofAddress", "proofAccount"]
+            const validationDoc = typesDocs.every(type=>user.documents.find(doc=>doc.type===type))
+            if(!validationDoc){
+                CustomError.createError({
+                    name:"Switch Role User Error",
+                    message:"El usuario no ha terminado de cargar su documentación.",
+                    code: errorsEnum.PRE_CONDITION_ERROR,
+                })
+            }
             newRole = "premium"
         }
         else{
