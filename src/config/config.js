@@ -28,7 +28,7 @@ dotenv.config({
 
 export default {
     environment:environment,
-    port: process.env.PORT,
+    port: process.env.PORT ||8080,
     urlMongo: process.env.MONGO_URL,
     adminName: process.env.ADMIN_NAME,
     adminPassword: process.env.ADMIN_PASSWORD,
