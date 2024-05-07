@@ -32,9 +32,39 @@ const mailOptions = (email,idToken) => {
     }
 }
 
-export const sendEmail = (idToken,email) => {
+export const sendEmailToResetPassword = (idToken,email) => {
     try {
         let result = transporter.sendMail(mailOptions(email,idToken), (error, info) => {
+            if (error) {
+                console.log(error);
+                return error
+            }
+            console.log('Message sent: %s', info.messageId);
+            return { message: "Success", payload: info }
+        })
+        return result
+
+    } catch (error) {
+        console.error(error);
+        return error
+    }
+}
+
+export const sendEmail = (email,subjetct,title,message) =>{
+    try{
+        const mailOp = (email,subjetct,title,message) => {
+            return {
+                from: config.emailAccount,
+                to: email,
+                subject: subjetct,
+                html: `<div>
+                            <h1>${title}</h1>
+                            <p>${message}</p>
+                        </div>`,
+                attachments: []
+            }
+        }
+        let result = transporter.sendMail(mailOp(email,subjetct,title,message), (error, info) => {
             if (error) {
                 console.log(error);
                 return error
@@ -45,8 +75,7 @@ export const sendEmail = (idToken,email) => {
         console.log(result)
         return result
 
-    } catch (error) {
-        console.error(error);
+    }catch{
         return error
     }
 }

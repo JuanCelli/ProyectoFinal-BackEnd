@@ -46,7 +46,7 @@ const initializePassport = () =>{
                 const {first_name,last_name,email,age,password} = req.body
 
                 const userRegistered = await userService.getUserByEmail(email)
-
+                
                 if(!userRegistered.error){
                     return done(null, false)
                 }

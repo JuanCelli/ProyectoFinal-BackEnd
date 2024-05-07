@@ -22,10 +22,31 @@ export const getCartById = async (req, res,next) => {
     }
 }
 
+export const getCartByOwner = async (req, res,next) => {
+    try {
+        const {email} = req.user
+        const response = await cartService.getCartByOwner(email)
+
+        if(response.error){
+            CustomError.createError({
+                name:"Cart Get Error",
+                cause:null,
+                message:"Carrito no econtrado",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
+        }
+
+        res.json(response)
+    }catch (error){
+        next(error)
+    }
+}
+
 
 export const createCart = async (req, res) => {
     try{
-        const cart = await cartService.createCart()
+        const owner = req.user.email
+        const cart = await cartService.createCart(owner)
         if(!cart?._id){
             CustomError.createError({
                 name:"Cart Create Error",
@@ -41,16 +62,36 @@ export const createCart = async (req, res) => {
 }
 
 export const addProductById = async (req, res, next) => {
-
     try {
         const {id,pid} = req.params
+        const cart = await cartService.getCartById(id)
+        
+        
+        if(cart.error){
+            CustomError.createError({
+                name:"Add Product to Cart Error",
+                cause:null,
+                message:"Carrito no encontrado",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
+        }
+        
+        if(req.user.email!==cart.owner){
+            CustomError.createError({
+                name:"Add Product to Cart Error",
+                cause:null,
+                message:"El usuario que quiere agregar productos no es propietario de ese carrito",
+                code: errorsEnum.NOT_FOUND_ERROR,
+            })
+        }
+        
         const response = await cartService.addProductToCart(id, pid)
 
         if(response.error){
             CustomError.createError({
                 name:"Add Product to Cart Error",
                 cause:null,
-                message:"El producto que intenta agregar no fue econtrado",
+                message:"El producto que intenta agregar no fue encontrado",
                 code: errorsEnum.NOT_FOUND_ERROR,
             })
         }
@@ -233,12 +274,23 @@ export const purchaseCart = async (req, res) => {
 
         const dataTicket = {
             amount: amount,
-            purchaser :"HaImplementar@gmail.com"
+            purchaser : cart.owner
         }
 
         const ticketResponse = await ticketService.createTicket(dataTicket)
         if(ticketResponse.error){
             throw ticketResponse
+        }
+
+        const response = await cartService.deleteCart(id)
+
+        if(response.error){
+            CustomError.createError({
+                name:"Cart Delete Error",
+                cause:null,
+                message:"Error al intentar eliminar carrito",
+                code: errorsEnum.INVALID_TYPES_ERROR,
+            })
         }
 
         res.json({amount: amount, notStockProducts: notStockProducts,ticket: ticketResponse})

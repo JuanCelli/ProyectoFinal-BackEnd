@@ -36,7 +36,6 @@ form.addEventListener("submit",(e)=>{
 const login = (e)=>{
     user = prompt("Ingrese su usuario")
     if(!user){
-        console.log("Hola")
         alert("No se ha podido identificar")
         return
     }

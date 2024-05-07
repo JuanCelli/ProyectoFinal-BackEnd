@@ -23,7 +23,6 @@ export const generateMockProduct = () =>{
 export const generateMockProducts = (amountProducts=100) =>{
     let products = []
 
-    console.log(amountProducts)
     for (let i = 0; i < amountProducts; i++) {
         products.push(generateMockProduct());
     }

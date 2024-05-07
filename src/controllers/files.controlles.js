@@ -24,8 +24,6 @@ export const uploadImgProduct = async (req, res,next) => {
         const {path} = req.file
         const reponse = await productsService.updateThumbnails(id,path)
 
-        console.log(reponse)
-
         if(reponse.error){
             CustomError.createError({
                 name:"Update Img Product Error",

@@ -28,7 +28,6 @@ router.post("/logout",logout)
 
 router.get("/current",passportCall("current"),(req,res)=>{
     try {
-        console.log(req.user)
         return res.status(200).json({currentUser: req.user})
     } catch (error) {
         res.json({error: error})

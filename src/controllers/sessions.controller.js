@@ -18,12 +18,12 @@ export const login = async (req, res) => {
         const access_token = generateToken(userToken);
         res.cookie('jwtCookieToken', access_token,
         {
-            maxAge: 600000,
+            maxAge: 86400000,
             httpOnly: true
         }
         )
         const response = await userService.UpdateLastConnection(req.user._id)
-        res.status(200).json({msj: "Bienvenido, has ingreseado correctamente."})
+        res.status(200).json({access_token:access_token})
     } catch (error) {
         res.json({error: error})
     }
@@ -31,7 +31,7 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
     try {
         res.clearCookie('jwtCookieToken');
-        const response = await userService.UpdateLastConnection(req.user._id)
+        const response = await userService.UpdateLastConnection(req.user?._id)
         res.status(200).json({ msj: "Has cerrado sesión correctamente." });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -43,7 +43,7 @@ export const githubCallback = async (req, res) => {
         const access_token = generateToken(userToken);
         res.cookie('jwtCookieToken', access_token,
         {
-            maxAge: 600000,
+            maxAge: 86400000,
             httpOnly: true
         }
         )

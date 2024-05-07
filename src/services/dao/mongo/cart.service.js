@@ -18,9 +18,9 @@ class CartManagerMongo{
         }
     }
 
-    async createCart(){
+    async createCart(owner){
         try {
-            const newCart = await cartModel.create({productsCart:[]})
+            const newCart = await cartModel.create({productsCart:[],owner:owner})
             return newCart
         } catch (error) {
             return error
@@ -127,6 +127,21 @@ class CartManagerMongo{
                 throw {error: true,status:400, msj: "Productos no eliminados"}
             }
             return response
+
+        } catch (error) {
+            return error
+        }
+    }
+
+    async getCartByOwner(email){
+        try {
+            const cart = await cartModel.findOne({$and:[{owner: email},{status:true}]}).populate("productsCart.product")
+
+            if(!cart){
+                throw {error: true, status:404, msj: "Not found"}
+            }
+
+            return cart
 
         } catch (error) {
             return error

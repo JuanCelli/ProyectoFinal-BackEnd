@@ -21,14 +21,20 @@ import ErrorHandler from './services/errors/middleware/ErrorHandler.js'
 import { addLogger } from './config/customLoggers.js'
 import swaggerUIExpress from 'swagger-ui-express'
 import swaggerSpecs from './swaggerSpecs.js'
-
-
-
-
+import cors from 'cors'
 
 
 const mongoUrlDb = config.urlMongo
 const app = express()
+app.options('*', cors({
+    origin: 'http://localhost:5173/',
+    credentials: true
+    }))
+
+// app.use(cors({
+//     origin: 'http://localhost:5173/',
+//     credentials: true
+//     }))
 
 app.use(cookieParser())
 app.use(express.json())
@@ -39,8 +45,7 @@ app.use(session(
     {
         store: MongoStore.create({
             mongoUrl: mongoUrlDb,
-            mongoOptions:{useNewUrlParser:true, useUnifiedTopology:true},
-            ttl: 60 * 10
+            ttl: 60 * 1440
         }),
         secret:"coderSecret",
         resave:false,

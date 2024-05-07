@@ -6,8 +6,8 @@ export default class CartRepository {
         return this.dao.getCartById(id);
     }
 
-    createCart = () => {
-        return this.dao.createCart();
+    createCart = (owner) => {
+        return this.dao.createCart(owner);
     }
 
     addProductToCart = (id, pid) => {
@@ -36,5 +36,8 @@ export default class CartRepository {
 
     deleteAllProductFromCart = (id) => {
         return this.dao.deleteAllProductFromCart(id);
+    }
+    getCartByOwner = (email) => {
+        return this.dao.getCartByOwner(email);
     }
 }

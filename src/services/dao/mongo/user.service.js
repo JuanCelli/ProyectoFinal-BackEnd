@@ -3,7 +3,7 @@ import userModel from "./models/user.model.js";
 class UserManagerMongo{
     async getUserByEmail(email){
         try {
-            const user = await userModel.findOne({email})
+            const user = await userModel.findOne({email: email})
             if(!user){
                 throw {error: true, status:404, msj: "Not found"}
             }
@@ -14,11 +14,37 @@ class UserManagerMongo{
     }
     async getUserById(id){
         try {
-            const user = await userModel.findOne({_id:id})
+            const user = await userModel.findOne({_id: id})
             if(!user){
                 throw {error: true, status:404, msj: "Not found"}
             }
             return user
+        } catch (error){
+            return error
+        }
+    }
+
+    async deleteUser(id){
+        try {
+            const userDeleted = await userModel.deleteOne({_id:id})
+
+            if(userDeleted===0){
+                throw {error: true,status:400, msj: "Usuario no eliminado"}
+            }
+            return userDeleted
+
+        } catch (error) {
+            return error
+        }
+    }
+
+    async getUsers(){
+        try {
+            const users = await userModel.find().select(["first_name","last_name","email","role","last_connection"])
+            if(!users){
+                throw {error: true, status:404, msj: "Not found"}
+            }
+            return users
         } catch (error){
             return error
         }
@@ -68,7 +94,7 @@ class UserManagerMongo{
     }
     async UploadFile(id,fileReference, fileName,type){
         try {
-            const response = await userModel.updateOne({_id: id}, {$push: {documents:{name:fileName,reference:fileReference,type:type}}})
+            const response = await userModel.updateOne({$and:[{_id: id},{status:true}]}, {$push: {documents:{name:fileName,reference:fileReference,type:type}}})
             if(response.acknowledged==false || response.modifiedCount==0){
                 throw {error: true,status:400, msj: "Error al intentar agregar documento."}
             }

@@ -284,3 +284,88 @@
 {"level":"error","message":"Producto no encontrado"}
 {"level":"error","message":"Producto no encontrado"}
 {"level":"error","message":"Producto no encontrado"}
+{"level":"error","message":"Usuario no encontrado"}
+{"level":"error","message":"Usuario no encontrado"}
+{"level":"error","message":"Usuario no encontrado"}
+{"level":"error","message":"No se han encontrado usuarios inactivos hace más de 2 días para eliminar."}
+{"level":"error","message":"No se han encontrado usuarios con inactividad de más de 0.00001 días para eliminar."}
+{"level":"error","message":"El usuario no ha terminado de cargar su documentación."}
+{"level":"error","message":"Producto no encontrado"}
+{"level":"error","message":"El usuario no ha terminado de cargar su documentación."}
+{"level":"error","message":"Error al intentar crear producto"}
+{"level":"error","message":"El usuario no tiene permisos para eliminar este producto."}
+{"level":"error","message":"Error al intentar actualizar cantidad de productos en carrito"}
+{"level":"error","message":"Error al intentar actualizar cantidad de productos en carrito"}
+{"level":"error","message":"Error al intentar actualizar cantidad de productos en carrito"}
+{"level":"error","message":"Error al intentar actualizar cantidad de productos en carrito"}
+{"level":"error","message":"Error al intentar actualizar cantidad de productos en carrito"}
+{"level":"error","message":"Error al intentar actualizar cantidad de productos en carrito"}
+{"level":"error","message":"Error al intentar actualizar cantidad de productos en carrito"}
+{"level":"error","message":"Error al intentar actualizar cantidad de productos en carrito"}
+{"level":"error","message":"Error al intentar actualizar cantidad de productos en carrito"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"El usuario no ha terminado de cargar su documentación."}
+{"level":"error","message":"El usuario no ha terminado de cargar su documentación."}
+{"level":"error","message":"El usuario no ha terminado de cargar su documentación."}
+{"level":"error","message":"El usuario no ha terminado de cargar su documentación."}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"El usuario no ha terminado de cargar su documentación."}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"El ID ingresado no es valido"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"Carrito no econtrado"}
+{"level":"error","message":"El usuario no ha terminado de cargar su documentación."}

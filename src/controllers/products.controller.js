@@ -4,6 +4,7 @@ import { generateMockProducts } from "../utils/generateMockProducts.js"
 import CustomError from "../services/errors/CustomError.js"
 import { generateProductCreateErrorInfo } from "../services/errors/messages/productCreateErrorInfo.js"
 import errorsEnum from "../services/errors/errors.enum.js"
+import { sendEmail } from "../utils/sendMail.js"
 
 
 export const getProducts = async (req, res,next) => {
@@ -38,12 +39,16 @@ export const getProductById = async (req, res,next) => {
 }
 export const createProduct = async (req, res,next) => {
     try {
-        const product = await productsService.createProduct(req.body)
+        const newProduct = req.body
+        if(req.user.role!=="admin"){
+            newProduct.owner = req.user.email
+        }
+        const product = await productsService.createProduct(newProduct)
 
         if (!product.status){
             CustomError.createError({
                 name:"Product Create Error",
-                cause:generateProductCreateErrorInfo(req.body),
+                cause:generateProductCreateErrorInfo(newProduct),
                 message:"Error al intentar crear producto",
                 code: errorsEnum.INVALID_TYPES_ERROR,
             })
@@ -56,11 +61,9 @@ export const createProduct = async (req, res,next) => {
 export const updateProduct = async (req, res,next) => {
     try{
         const {id} = req.params
-        
         const product = await productsService.getProductById(id)
-        
         const newProduct = req.body
-        
+
         if(req.user.role!=="admin"){
             if(req.user.email!==product.owner){
                 CustomError.createError({
@@ -98,13 +101,13 @@ export const deleteProduct = async (req, res,next) => {
             CustomError.createError({
                 name:"Product Delete Error",
                 cause:null,
-                message:"Producto no econtrado",
+                message:"Producto no encontrado",
                 code: errorsEnum.NOT_FOUND_ERROR,
             })
         }
 
         if(req.user?.role!=="admin"){
-            if(req.user.role!==product.owner){
+            if(req.user.email!==product.owner){
                 CustomError.createError({
                     name:"Authorized Error",
                     cause:null,
@@ -122,6 +125,10 @@ export const deleteProduct = async (req, res,next) => {
                 cause:null,
                 message:"Error al intentar eliminar producto, producto no econtrado",
             })
+        }
+
+        if(product.owner && product.owner !== "admin"){
+            sendEmail(product.owner, "Producto Eliminado", "Producto Eliminado", `Le informamos que el producto ${product.title} (ID: ${product._id}) ha sido eliminado.`)
         }
 
         res.status(200).json({message: `Producto eliminado con éxito (ID: ${id})`})

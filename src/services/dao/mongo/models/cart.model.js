@@ -13,6 +13,7 @@ const cartSchema = new Schema({
     productsCart:[
         productsOfCartSchema
     ],
+    owner:{type: String, require: true},
     status: {type: Boolean, default: true}
 });
 

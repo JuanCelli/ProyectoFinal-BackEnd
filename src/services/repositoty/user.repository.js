@@ -10,6 +10,12 @@ export default class UserRepository {
         return this.dao.getUserById(id);
     }
 
+    getUsers = () => {
+        return this.dao.getUsers();
+    }
+    deleteUser = (id) => {
+        return this.dao.deleteUser(id);
+    }
     createUser = (data) => {
         return this.dao.createUser(data);
 
